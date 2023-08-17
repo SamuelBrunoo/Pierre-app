@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "10278777617",
+    "project_id": "pierre-back",
+    "storage_bucket": "pierre-back.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10278777617:android:e75894b824928cdaf552b0",
+        "android_client_info": {
+          "package_name": "com.pierre"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "10278777617-q7b40oo4jon3d1ecdj8lmbhqcqo8mgrg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmnvjnpmx8Ab_WC07MSuqnwTVI4nPAUxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10278777617-q7b40oo4jon3d1ecdj8lmbhqcqo8mgrg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
