@@ -4,6 +4,9 @@ import ScheduleIcon from '../../assets/icons/schedule.svg'
 import TalksIcon from '../../assets/icons/talks.svg'
 
 import CheckIcon from '../../assets/icons/check.svg'
+import ClockIcon from '../../assets/icons/clock.svg'
+import PlusIcon from '../../assets/icons/plus.svg'
+import SendIcon from '../../assets/icons/send.svg'
 
 export {
   HomeIcon,
@@ -11,5 +14,8 @@ export {
   ScheduleIcon,
   TalksIcon,
 
-  CheckIcon
+  CheckIcon,
+  ClockIcon,
+  PlusIcon,
+  SendIcon,
 }
