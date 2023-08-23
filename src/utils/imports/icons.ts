@@ -7,6 +7,8 @@ import CheckIcon from '../../assets/icons/check.svg'
 import ClockIcon from '../../assets/icons/clock.svg'
 import PlusIcon from '../../assets/icons/plus.svg'
 import SendIcon from '../../assets/icons/send.svg'
+import ArrowThick from '../../assets/icons/arrow_thick.svg'
+import ExpandIcon from '../../assets/icons/expand.svg'
 
 export {
   HomeIcon,
@@ -18,4 +20,6 @@ export {
   ClockIcon,
   PlusIcon,
   SendIcon,
+  ArrowThick,
+  ExpandIcon,
 }

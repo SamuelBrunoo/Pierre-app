@@ -8,11 +8,11 @@ export const Container = styled.View`
   padding-right: 24px;
   padding-left: 24px;
   justify-content:  flex-start;
+  row-gap: 40px;
 `
 
 export const PageHead = styled.View`
   padding-top: 30px;
-  padding-bottom: 30px;
 `
 
 export const Welcome = styled.View``
@@ -76,4 +76,61 @@ export const ScName = styled.Text`
   font-weight: 300;
   color: #FFF;
   text-align: center;
+`
+
+export const InfoResume = styled.View`
+  row-gap: 14px;
+`
+
+export const TopBlock = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+export const InfoTitle = styled.Text`
+  font-size: 24px;
+  font-weight: 500;
+  color: #FFF;
+`
+
+export const Seemore = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  opacity: .6;
+`
+
+export const SeeMoreText = styled.Text`
+  font-size: 14px;
+  color: #FFF;
+`
+
+export const ReportList = styled.View`
+  padding-right:20px;
+  padding-left:20px;
+  row-gap: 6px;
+`
+
+export const Row = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`
+
+export const TableLabel = styled.Text`
+  font-size: 16px;
+  color: #FFF;
+`
+
+export const TableValue = styled.Text`
+  font-size:16px;
+  font-weight: 300;
+  color: #AFAFAF;
+`
+
+export const RevisitsList = styled.ScrollView`
+  row-gap: 10px;
+  max-height: 180px;
+  overflow-y: scroll;
+  padding-right: 20px;
 `
