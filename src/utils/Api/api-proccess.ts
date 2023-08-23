@@ -7,7 +7,15 @@ const login = async (email: string, pass: string): Promise<LoginRes> => {
 
   let result: LoginRes = await auth()
     .signInWithEmailAndPassword(email, pass)
-    .then((): LoginRes => ({ ok: true }))
+    .then(({ user }): LoginRes => ({
+      ok: true,
+      userInfo: {
+        name: user.displayName || 'Visitante',
+        email: user.email as string,
+        id: user.uid,
+        logged: true
+      }
+    }))
     .catch(async (signInErr): Promise<LoginRes> => {
       const resume = verifySignInError(signInErr.code)
 
@@ -27,11 +35,27 @@ const login = async (email: string, pass: string): Promise<LoginRes> => {
 }
 
 const register = async (email: string, pass: string): Promise<LoginRes> => {
-  let result: LoginRes = { ok: true }
+  let result: LoginRes = {
+    ok: true,
+    userInfo: {
+      name: '',
+      email: '',
+      id: '',
+      logged: false
+    }
+  }
 
   await auth()
     .createUserWithEmailAndPassword(email, pass)
-    .then(() => result = { ok: true })
+    .then(({ user }) => result = {
+      ok: true,
+      userInfo: {
+        name: user.displayName || 'Visitante',
+        email: user.email as string,
+        id: user.uid,
+        logged: true
+      }
+    })
     .catch((signUpErr) => {
       const resume = verifySignInError(signUpErr.code) as
         {
@@ -39,7 +63,7 @@ const register = async (email: string, pass: string): Promise<LoginRes> => {
           field: 'email' | 'password';
           message: string;
         }
-        
+
       Alert.alert(JSON.stringify(resume))
 
       result = {

@@ -1,6 +1,8 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
+import TabBarItem from '../../components/TabBarItem'
+
 import HomePage from '../../screens/Home'
 
 
@@ -8,7 +10,7 @@ const MainNavigator = () => {
 
   const Tab = createBottomTabNavigator()
 
-  
+
   return (
     <Tab.Navigator screenOptions={{
       tabBarStyle: {
@@ -18,7 +20,9 @@ const MainNavigator = () => {
       }
     }}>
       <Tab.Screen name='Home' component={HomePage} options={{
-        headerShown: false
+        headerShown: false,
+        tabBarIcon: () => TabBarItem('home'),   // boolean as 2nd param to show (in)active item style
+        tabBarShowLabel: false,
       }} />
     </Tab.Navigator>
   )

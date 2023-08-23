@@ -5,11 +5,13 @@ import { useNavigation } from '@react-navigation/native'
 import Api from '../../utils/Api'
 import { Alert } from 'react-native'
 import { FieldsErrors } from '../../utils/types/loginForm'
+import useStore from '../../store'
 
 
 const LoginScreen = () => {
 
   const navigation = useNavigation<any>()
+  const User = useStore(state => state.User)
 
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
@@ -23,7 +25,10 @@ const LoginScreen = () => {
     if (email.trim() !== '' && pass.trim() !== '') {
       const proccess = await Api.login(email, pass)
 
-      if (proccess.ok === true) navigation.navigate('App', { screen: 'Home' })
+      if (proccess.ok === true) {
+        User.storeInfo(proccess.userInfo)
+        navigation.navigate('Main', { screen: 'Home' })
+      }
       else {
         let wrongFields = { ...errors }
         wrongFields[proccess.error.name] =

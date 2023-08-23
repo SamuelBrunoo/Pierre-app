@@ -1,5 +1,8 @@
+import { UserInfo } from "../user";
+
 export type LoginRes = {
   ok: true;
+  userInfo: UserInfo;
 } | {
   ok: false;
   error: FieldError
