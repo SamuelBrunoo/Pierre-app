@@ -9,6 +9,9 @@ import PlusIcon from '../../assets/icons/plus.svg'
 import SendIcon from '../../assets/icons/send.svg'
 import ArrowThick from '../../assets/icons/arrow_thick.svg'
 import ExpandIcon from '../../assets/icons/expand.svg'
+import ArrowThin from '../../assets/icons/arrow_thin.svg'
+import LocationIcon from '../../assets/icons/location.svg'
+
 
 export {
   HomeIcon,
@@ -22,4 +25,6 @@ export {
   SendIcon,
   ArrowThick,
   ExpandIcon,
+  ArrowThin,
+  LocationIcon,
 }

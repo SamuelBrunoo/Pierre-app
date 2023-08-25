@@ -67,10 +67,6 @@ const HomeScreen = () => {
   return (
     <S.Page
       nestedScrollEnabled={true}
-      style={{
-        flex: 1,
-        backgroundColor: 'rgba(35, 35, 35, 1)',
-      }}
       contentContainerStyle={{
         justifyContent: 'flex-start',
         rowGap: 30,

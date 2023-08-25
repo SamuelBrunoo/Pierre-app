@@ -1,7 +1,9 @@
 import styled from "styled-components/native"
 
 
-export const Page = styled.ScrollView``
+export const Page = styled.ScrollView`
+  flex: 1;
+`
 
 export const Container = styled.View`
   row-gap: 10px;
@@ -52,7 +54,7 @@ export const Shortcuts = styled.View`
   align-items: center;
   padding-top: 12px;
   padding-bottom: 12px;
-  background-color: #1E1E1E;
+  background-color: rgba(30, 30, 30, 1);
   gap: 24px;
 `
 
@@ -68,7 +70,7 @@ export const ScIconArea = styled.View`
   width: 36px;
   height: 36px;
   border-radius: 50px;
-  background-color: #232323;
+  background-color: rgba(23, 23, 23, 1);
 `
 
 export const ScName = styled.Text`
