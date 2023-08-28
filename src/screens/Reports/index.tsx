@@ -7,6 +7,7 @@ import { icons } from '../../utils/imports'
 import HomeRevisitItem from '../../components/HomeRevisitItem'
 import { ArrowThin } from '../../utils/imports/icons'
 import TalkItem from '../../components/TalkItem'
+import Calendar from '../../components/Calendar'
 
 
 const events = [
@@ -33,30 +34,54 @@ const events = [
   },
 ]
 
-const revisits = [
+const months = [
   {
-    personName: 'Jurema da Silva',
-    location: 'Canudos',
-    lastVisitDate: '23/08/2023',
-    id: 1,
+    active: false,
+    name: 'Setembro',
   },
   {
-    personName: 'Fulaneide',
-    location: 'Vila Doze',
-    lastVisitDate: '22/08/2023',
-    id: 2,
+    active: false,
+    name: 'Outubro',
   },
   {
-    personName: 'Barcileide',
-    location: 'Rio Farias',
-    lastVisitDate: '22/08/2023',
-    id: 3,
+    active: false,
+    name: 'Novembro',
   },
   {
-    personName: 'Cleitu',
-    location: 'Coca-Cola',
-    lastVisitDate: '19/08/2023',
-    id: 4,
+    active: true,
+    name: 'Dezembro',
+  },
+  {
+    active: false,
+    name: 'Janeiro',
+  },
+  {
+    active: false,
+    name: 'Fevereiro',
+  },
+  {
+    active: false,
+    name: 'Março',
+  },
+  {
+    active: false,
+    name: 'Abril',
+  },
+  {
+    active: false,
+    name: 'Maio',
+  },
+  {
+    active: false,
+    name: 'Junho',
+  },
+  {
+    active: false,
+    name: 'Julho',
+  },
+  {
+    active: false,
+    name: 'Agosto',
   },
 ]
 
@@ -74,57 +99,49 @@ const ReportsScreen = () => {
       }}
     >
       <S.Container>
-        <S.CategoriesTabs>
-          <S.Category activeOpacity={1} active={false}>
-            <S.CatName>1ª conversa</S.CatName>
-          </S.Category>
-          <S.Category activeOpacity={1} active={true}>
-            <S.CatName>Revisita</S.CatName>
-          </S.Category>
-          <S.Category activeOpacity={1} active={false}>
-            <S.CatName>Estudo</S.CatName>
-          </S.Category>
-        </S.CategoriesTabs>
-        <S.Filters>
-          <S.DropdownArea>
-            <S.DropTop activeOpacity={1}>
-              <S.DropName>Região</S.DropName>
-              <ArrowThin />
-              <S.Dropdown></S.Dropdown>
-            </S.DropTop>
-            <S.Selected>Antônio Carlos</S.Selected>
-          </S.DropdownArea>
-          <S.DropdownArea>
-            <S.DropTop activeOpacity={1}>
-              <S.DropName>Ordernar por</S.DropName>
-              <ArrowThin />
-              <S.Dropdown></S.Dropdown>
-            </S.DropTop>
-            <S.Selected>Mais recente</S.Selected>
-          </S.DropdownArea>
-        </S.Filters>
+        <S.Annual>
+          <S.ReportTitle>Anual</S.ReportTitle>
+          <S.AnnualReport>
+            <S.AnnualReportItem>
+              <S.ARILabel>Horas</S.ARILabel>
+              <S.ARIValue>50</S.ARIValue>
+            </S.AnnualReportItem>
+            <S.AnnualReportItem>
+              <S.ARILabel>Revistas</S.ARILabel>
+              <S.ARIValue>50</S.ARIValue>
+            </S.AnnualReportItem>
+            <S.AnnualReportItem>
+              <S.ARILabel>Publicações</S.ARILabel>
+              <S.ARIValue>50</S.ARIValue>
+            </S.AnnualReportItem>
+            <S.AnnualReportItem>
+              <S.ARILabel>Vídeos</S.ARILabel>
+              <S.ARIValue>50</S.ARIValue>
+            </S.AnnualReportItem>
+            <S.AnnualReportItem>
+              <S.ARILabel>Estudos</S.ARILabel>
+              <S.ARIValue>50</S.ARIValue>
+            </S.AnnualReportItem>
+            <S.AnnualReportItem>
+              <S.ARILabel>Estudos totais</S.ARILabel>
+              <S.ARIValue>50</S.ARIValue>
+            </S.AnnualReportItem>
+          </S.AnnualReport >
+        </S.Annual >
+      </S.Container >
+      <S.MonthsSelect horizontal={true}>
+        <S.MonthsContainer>
+          {months.map((m, k) => (
+            <S.MonthItem key={k} active={m.active} activeOpacity={1}>
+              <S.MonthName>{m.name}</S.MonthName>
+            </S.MonthItem>
+          ))}
+        </S.MonthsContainer>
+      </S.MonthsSelect>
+      <S.Container>
+        <Calendar />
       </S.Container>
-      <S.TalksList
-        contentContainerStyle={{
-          rowGap: 12,
-          paddingTop: 10,
-        }}>
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-      </S.TalksList>
-    </S.Page>
+    </S.Page >
   )
 
 }

@@ -13,8 +13,8 @@ const LoginScreen = () => {
   const navigation = useNavigation<any>()
   const User = useStore(state => state.User)
 
-  const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
+  const [email, setEmail] = useState('samuelmc983@gmail.com')
+  const [pass, setPass] = useState('12345678')
   const [errors, setErrors] = useState<FieldsErrors>({
     email: { has: false, message: '' },
     password: { has: false, message: '' },

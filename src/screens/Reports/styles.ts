@@ -1,7 +1,11 @@
+import { Dimensions } from "react-native"
 import styled from "styled-components/native"
 
 
-export const Page = styled.ScrollView``
+export const Page = styled.ScrollView`
+  padding-top: 20px;
+  padding-bottom: 60px;
+`
 
 export const Container = styled.View`
   row-gap: 10px;
@@ -11,54 +15,58 @@ export const Container = styled.View`
   row-gap: 20px;
 `
 
-export const CategoriesTabs = styled.View`
-  background-color: rgba(34, 34, 34, 1);
-  border-radius: 6px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 20px;
+export const Annual = styled.View`
+  row-gap: 14px;
 `
 
-export const Category = styled.TouchableOpacity<{ active: boolean; }>`
-  flex: 1;
-  opacity: ${({ active }) => active ? 1 : 0.6};
-`
-
-export const CatName = styled.Text`
-  color:#FFF;
+export const ReportTitle = styled.Text`
   text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+  color: #AFAFAF;
 `
 
-export const Filters = styled.View`
+export const AnnualReport = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  row-gap: 6px;
+`
+
+export const AnnualReportItem = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  width: ${() => Math.floor(Dimensions.get('screen').width * .375)}px;
 `
 
-export const DropdownArea = styled.View``
+export const ARILabel = styled.Text`
+  font-size: 16px;
+  color: #FFF;
+`
 
-export const DropTop = styled.TouchableOpacity`
+export const ARIValue = styled.Text`
+  font-size: 16px;
+  color: #AFAFAF;
+`
+
+export const MonthsSelect = styled.ScrollView`
+  margin: 40px 0 20px;
+  padding: 12px 24px;
+  max-height: 50px;
+  background-color: rgba(30, 30, 30, 1);
+`
+
+export const MonthsContainer = styled.View`
   flex-direction: row;
-  align-items: center;
-  gap: 4px;
-  opacity: .6;
+  column-gap: 32px;
 `
 
-export const Dropdown = styled.View``
+export const MonthItem = styled.TouchableOpacity<{ active: boolean; }>`
+  justify-content: center;
+  opacity: ${({ active }) => active ? 1 : .5};
+`
 
-export const DropName = styled.Text`
-  font-size: 12px;
+export const MonthName = styled.Text`
   color: #FFF;
-`
-
-export const Selected = styled.Text`
-  font-size: 14px;
-  font-weight: 500;
-  color: #FFF;
-`
-
-export const TalksList = styled.ScrollView`
-  flex: 1;
-  margin: 20px 24px 12px 10px;
 `

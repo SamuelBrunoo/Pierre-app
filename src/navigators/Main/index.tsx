@@ -9,6 +9,8 @@ import TabBarItem from '../../components/TabBarItem'
 
 import HomeScreen from '../../screens/Home'
 import TalksScreen from '../../screens/Talks'
+import ReportsScreen from '../../screens/Reports'
+import ScheduleScreen from '../../screens/Schedule'
 
 
 const MainNavigator = () => {
@@ -17,18 +19,20 @@ const MainNavigator = () => {
 
 
   return (
-    <Tab.Navigator sceneContainerStyle={{
-      backgroundColor: 'rgba(23, 23, 23, 1)',
-    }} screenOptions={{
-      tabBarStyle: {
-        backgroundColor: "#3A3A3A",
-        borderTopWidth: 0,
-        height: 60
-      },
-      headerShown: false,
-      tabBarShowLabel: false,
-      headerShadowVisible: false
-    }}>
+    <Tab.Navigator
+      sceneContainerStyle={{
+        backgroundColor: 'rgba(23, 23, 23, 1)',
+      }}
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: "#3A3A3A",
+          borderTopWidth: 0,
+          height: 60
+        },
+        headerShown: false,
+        tabBarShowLabel: false,
+        headerShadowVisible: false,
+      }}>
       <Tab.Screen name='Home' component={HomeScreen} options={{
         tabBarIcon: ({ focused }) => TabBarItem('home', focused),
       }} />
@@ -37,11 +41,15 @@ const MainNavigator = () => {
         headerTitle: 'Pessoas contatadas',
         ...mainScreensHeaderProps as Partial<BottomTabNavigationOptions>
       }} />
-      <Tab.Screen name='Reports' component={HomeScreen} options={{
+      <Tab.Screen name='Reports' component={ReportsScreen} options={{
         tabBarIcon: ({ focused }) => TabBarItem('reports', focused),
+        headerTitle: 'Relatórios',
+        ...mainScreensHeaderProps as Partial<BottomTabNavigationOptions>
       }} />
-      <Tab.Screen name='Schedule' component={HomeScreen} options={{
+      <Tab.Screen name='Schedule' component={ScheduleScreen} options={{
         tabBarIcon: ({ focused }) => TabBarItem('schedule', focused),
+        headerTitle: 'Programação',
+        ...mainScreensHeaderProps as Partial<BottomTabNavigationOptions>
       }} />
     </Tab.Navigator>
   )
