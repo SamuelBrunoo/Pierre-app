@@ -93,9 +93,10 @@ const ReportsScreen = () => {
 
   return (
     <S.Page
+      nestedScrollEnabled={true}
       contentContainerStyle={{
         justifyContent: 'flex-start',
-        flex: 1,
+        paddingBottom: 60
       }}
     >
       <S.Container>
@@ -140,6 +141,34 @@ const ReportsScreen = () => {
       </S.MonthsSelect>
       <S.Container>
         <Calendar />
+        <S.Monthly>
+          <S.ReportTitle>Nesse mês</S.ReportTitle>
+          <S.MonthlyReport>
+            <S.MonthlyReportItem>
+              <S.HoursLabels>
+                <S.MRILabel>Horas</S.MRILabel>
+                <S.HoursLeft>(faltam 20 horas)</S.HoursLeft>
+              </S.HoursLabels>
+              <S.MRIValue>50</S.MRIValue>
+            </S.MonthlyReportItem>
+            <S.MonthlyReportItem>
+              <S.MRILabel>Revistas</S.MRILabel>
+              <S.MRIValue>50</S.MRIValue>
+            </S.MonthlyReportItem>
+            <S.MonthlyReportItem>
+              <S.MRILabel>Publicações</S.MRILabel>
+              <S.MRIValue>50</S.MRIValue>
+            </S.MonthlyReportItem>
+            <S.MonthlyReportItem>
+              <S.MRILabel>Vídeos</S.MRILabel>
+              <S.MRIValue>50</S.MRIValue>
+            </S.MonthlyReportItem>
+            <S.MonthlyReportItem>
+              <S.MRILabel>Estudos</S.MRILabel>
+              <S.MRIValue>50</S.MRIValue>
+            </S.MonthlyReportItem>
+          </S.MonthlyReport>
+        </S.Monthly >
       </S.Container>
     </S.Page >
   )

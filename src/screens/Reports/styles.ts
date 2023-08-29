@@ -4,7 +4,6 @@ import styled from "styled-components/native"
 
 export const Page = styled.ScrollView`
   padding-top: 20px;
-  padding-bottom: 60px;
 `
 
 export const Container = styled.View`
@@ -67,6 +66,41 @@ export const MonthItem = styled.TouchableOpacity<{ active: boolean; }>`
   opacity: ${({ active }) => active ? 1 : .5};
 `
 
+export const HoursLabels = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+`
+
 export const MonthName = styled.Text`
   color: #FFF;
+`
+
+export const HoursLeft = styled.Text`
+  color: #AFAFAF;
+  font-size: 12px;
+`
+
+export const Monthly = styled.View`
+  row-gap: 14px;
+`
+
+export const MonthlyReport = styled.View`
+  row-gap: 6px;
+`
+
+export const MonthlyReportItem = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`
+
+export const MRILabel = styled.Text`
+  font-size: 16px;
+  color: #FFF;
+`
+
+export const MRIValue = styled.Text`
+  font-size: 16px;
+  color: #AFAFAF;
 `
