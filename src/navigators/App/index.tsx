@@ -3,15 +3,19 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import LoginScreen from '../../screens/Login'
 import MainNavigator from '../Main'
-import useStore from '../../store'
+import { useMMKVObject } from 'react-native-mmkv'
+import { UserInfo } from '../../utils/types/user'
 
 
 const Stack = createNativeStackNavigator()
 
 const AppNavigator = () => {
 
-  const { logged } = useStore(store => store.user)
+  const [localUser] = useMMKVObject<UserInfo>('user')
 
+  const logged = localUser?.logged ?? false
+
+  
   return (
     <Stack.Navigator screenOptions={{
       headerShown: false

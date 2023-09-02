@@ -1,4 +1,4 @@
-import routes from "./api-proccess"
+import routes from "./api"
 
 
 export default routes

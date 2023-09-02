@@ -1,10 +1,11 @@
 import React from 'react'
 import * as S from './styles'
-import useStore from '../../store'
 import HomeAgendaItem from '../../components/HomeAgendaItem'
 
 import { icons } from '../../utils/imports'
 import HomeRevisitItem from '../../components/HomeRevisitItem'
+import { useMMKVObject } from 'react-native-mmkv'
+import { UserInfo } from '../../utils/types/user'
 
 
 const events = [
@@ -62,7 +63,8 @@ const revisits = [
 
 const HomeScreen = () => {
 
-  const user = useStore(store => store.user)
+  const [user] = useMMKVObject<UserInfo>('user')
+
 
   return (
     <S.Page
@@ -76,7 +78,7 @@ const HomeScreen = () => {
         <S.PageHead>
           <S.Welcome>
             <S.Hi>Boa tarde,</S.Hi>
-            <S.UserName>{user.name}</S.UserName>
+            <S.UserName>{user?.name}</S.UserName>
           </S.Welcome>
         </S.PageHead>
 

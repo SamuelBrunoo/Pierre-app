@@ -11,6 +11,7 @@ import ArrowThick from '../../assets/icons/arrow_thick.svg'
 import ExpandIcon from '../../assets/icons/expand.svg'
 import ArrowThin from '../../assets/icons/arrow_thin.svg'
 import LocationIcon from '../../assets/icons/location.svg'
+import ViewBigIcon from '../../assets/icons/view_big.svg'
 
 
 export {
@@ -27,4 +28,5 @@ export {
   ExpandIcon,
   ArrowThin,
   LocationIcon,
+  ViewBigIcon,
 }

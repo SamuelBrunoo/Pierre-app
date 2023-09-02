@@ -1,7 +1,8 @@
 import styled from "styled-components/native"
 
 
-export const Page = styled.ScrollView``
+export const Page = styled.ScrollView`
+`
 
 export const Container = styled.View`
   row-gap: 10px;
@@ -11,54 +12,136 @@ export const Container = styled.View`
   row-gap: 20px;
 `
 
-export const CategoriesTabs = styled.View`
-  background-color: rgba(34, 34, 34, 1);
-  border-radius: 6px;
+export const Legends = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+export const Legend = styled.View`
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  padding: 8px 20px;
+  gap: 4px;
 `
 
-export const Category = styled.TouchableOpacity<{ active: boolean; }>`
-  flex: 1;
-  opacity: ${({ active }) => active ? 1 : 0.6};
+export const LegendColor = styled.View<{ color: 'orange' | 'purple' }>`
+  width: 12px;
+  height: 12px;
+  border-radius: 12px;
+  background-color: ${({ color }) => color === 'orange' ?
+    'rgba(255, 138, 31, 1)' : 'rgba(159, 0, 216, 1)'
+  };
 `
 
-export const CatName = styled.Text`
-  color:#FFF;
+export const LegendLabel = styled.Text`
+  font-size: 12px;
+  font-weight: 300;
+  color: #FFF;
+`
+
+export const Line = styled.View`
+  height: 1px;
+  background-color: #AFAFAF;
+  width: 87%;
+  align-self: center;
+`
+
+export const Resume = styled.View`
+  row-gap: 12px;
+`
+
+export const ResumeTitle = styled.Text`
   text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+  color: #AFAFAF;
 `
 
-export const Filters = styled.View`
+export const MonthlyHours = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+export const MHLabel = styled.Text`
+  font-size: 16px;
+  color: #FFF;
+`
+
+export const MHValue = styled.Text`
+  font-size: 16px;
+  font-weight: 300;
+  color: #AFAFAF;
+`
+
+export const MonthlyCalcs = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 32px;
+`
+
+export const Descriptions = styled.View`
+  width: 120px;
+  row-gap: 0px;
+`
+
+export const Category = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+export const CatLabel = styled.Text`
+  font-size: 16px;
+  color: #FFF;
+`
+
+export const CatValue = styled.Text`
+  font-size: 16px;
+  font-weight: 300;
+  color: #AFAFAF;
+`
+
+export const Arrengements = styled.View`
+  width: 40px;
+  row-gap: 0px;
+`
+
+export const ArrResume = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 `
 
-export const DropdownArea = styled.View``
+export const ArrLabel = styled.Text`
+  font-size: 16px;
+  font-weight: 300;
+  color: #AFAFAF;
+`
 
-export const DropTop = styled.TouchableOpacity`
+export const ButtonsArea = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: 4px;
-  opacity: .6;
+  justify-content: space-evenly;
 `
 
-export const Dropdown = styled.View``
+export const Btn = styled.TouchableOpacity`
+  color: #FFF;
+  align-items: center;
+  row-gap: 6px;
+`
 
-export const DropName = styled.Text`
+export const BtnIconArea = styled.View`
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50px;
+  background-color: rgba(32, 32, 32, 1);
+`
+
+export const BtnName = styled.Text`
   font-size: 12px;
+  font-weight: 300;
   color: #FFF;
-`
-
-export const Selected = styled.Text`
-  font-size: 14px;
-  font-weight: 500;
-  color: #FFF;
-`
-
-export const TalksList = styled.ScrollView`
-  flex: 1;
-  margin: 20px 24px 12px 10px;
+  text-align: center;
 `

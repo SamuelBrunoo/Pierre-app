@@ -6,12 +6,16 @@ import Api from '../../utils/Api'
 import { Alert } from 'react-native'
 import { FieldsErrors } from '../../utils/types/loginForm'
 import useStore from '../../store'
+import { UserInfo } from '../../utils/types/user'
+import { useMMKVObject } from 'react-native-mmkv'
+
 
 
 const LoginScreen = () => {
 
   const navigation = useNavigation<any>()
   const User = useStore(state => state.User)
+  const [, setLocalUser] = useMMKVObject<UserInfo>('user')
 
   const [email, setEmail] = useState('samuelmc983@gmail.com')
   const [pass, setPass] = useState('12345678')
@@ -26,7 +30,7 @@ const LoginScreen = () => {
       const proccess = await Api.login(email, pass)
 
       if (proccess.ok === true) {
-        User.storeInfo(proccess.userInfo)
+        saveInfoInLocal(proccess.userInfo)
         navigation.navigate('Main', { screen: 'Home' })
       }
       else {
@@ -54,6 +58,11 @@ const LoginScreen = () => {
       { ...errors, password: { ...errors.password, has: false } }
     )
     setPass(t)
+  }
+
+  const saveInfoInLocal = (userInfo: UserInfo) => {
+    User.storeInfo(userInfo)
+    setLocalUser(userInfo)
   }
 
 

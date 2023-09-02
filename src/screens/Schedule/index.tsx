@@ -1,129 +1,109 @@
 import React from 'react'
 import * as S from './styles'
-import useStore from '../../store'
-import HomeAgendaItem from '../../components/HomeAgendaItem'
-
-import { icons } from '../../utils/imports'
-import HomeRevisitItem from '../../components/HomeRevisitItem'
-import { ArrowThin } from '../../utils/imports/icons'
-import TalkItem from '../../components/TalkItem'
-
-
-const events = [
-  {
-    name: 'Carrinho com Beltrana',
-    time: '14:00 - 16:00',
-    done: true,
-  },
-  {
-    name: 'Estudo',
-    time: '18:00 - 19:00',
-    done: true,
-    studentName: 'Marcinha'
-  },
-  {
-    name: 'Carrinho com Beltrana',
-    time: '14:00 - 16:00',
-    done: true,
-  },
-  {
-    name: 'Carrinho com Beltrana',
-    time: '14:00 - 16:00',
-    done: true,
-  },
-]
-
-const revisits = [
-  {
-    personName: 'Jurema da Silva',
-    location: 'Canudos',
-    lastVisitDate: '23/08/2023',
-    id: 1,
-  },
-  {
-    personName: 'Fulaneide',
-    location: 'Vila Doze',
-    lastVisitDate: '22/08/2023',
-    id: 2,
-  },
-  {
-    personName: 'Barcileide',
-    location: 'Rio Farias',
-    lastVisitDate: '22/08/2023',
-    id: 3,
-  },
-  {
-    personName: 'Cleitu',
-    location: 'Coca-Cola',
-    lastVisitDate: '19/08/2023',
-    id: 4,
-  },
-]
-
+import { PlusIcon, ViewBigIcon } from '../../utils/imports/icons'
+import Calendar from '../../components/Calendar'
 
 
 const ScheduleScreen = () => {
 
-  const user = useStore(store => store.user)
 
   return (
     <S.Page
       contentContainerStyle={{
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
+        gap: 20,
         flex: 1,
+        paddingBottom: 60
       }}
     >
       <S.Container>
-        <S.CategoriesTabs>
-          <S.Category activeOpacity={1} active={false}>
-            <S.CatName>1ª conversa</S.CatName>
-          </S.Category>
-          <S.Category activeOpacity={1} active={true}>
-            <S.CatName>Revisita</S.CatName>
-          </S.Category>
-          <S.Category activeOpacity={1} active={false}>
-            <S.CatName>Estudo</S.CatName>
-          </S.Category>
-        </S.CategoriesTabs>
-        <S.Filters>
-          <S.DropdownArea>
-            <S.DropTop activeOpacity={1}>
-              <S.DropName>Região</S.DropName>
-              <ArrowThin />
-              <S.Dropdown></S.Dropdown>
-            </S.DropTop>
-            <S.Selected>Antônio Carlos</S.Selected>
-          </S.DropdownArea>
-          <S.DropdownArea>
-            <S.DropTop activeOpacity={1}>
-              <S.DropName>Ordernar por</S.DropName>
-              <ArrowThin />
-              <S.Dropdown></S.Dropdown>
-            </S.DropTop>
-            <S.Selected>Mais recente</S.Selected>
-          </S.DropdownArea>
-        </S.Filters>
+        <Calendar />
+        <S.Legends>
+          <S.Legend>
+            <S.LegendColor color={'orange'} />
+            <S.LegendLabel>Arranjos fixos</S.LegendLabel>
+          </S.Legend>
+          <S.Legend>
+            <S.LegendColor color={'purple'} />
+            <S.LegendLabel>Arranjos pontuais</S.LegendLabel>
+          </S.Legend>
+        </S.Legends>
+        <S.Line />
+        <S.Resume>
+          <S.ResumeTitle>Programação mensal</S.ResumeTitle>
+          <S.MonthlyHours>
+            <S.MHLabel>Horas</S.MHLabel>
+            <S.MHValue>50</S.MHValue>
+          </S.MonthlyHours >
+          <S.MonthlyCalcs>
+            <S.Descriptions>
+              <S.Category>
+                <S.CatLabel>Ministério:</S.CatLabel>
+                <S.CatValue>32</S.CatValue>
+              </S.Category>
+              <S.Category>
+                <S.CatLabel>LDC:</S.CatLabel>
+                <S.CatValue>18</S.CatValue>
+              </S.Category>
+            </S.Descriptions>
+            <S.Arrengements>
+              <S.ArrResume>
+                <S.LegendColor color={'orange'} />
+                <S.ArrLabel>32</S.ArrLabel>
+              </S.ArrResume>
+              <S.ArrResume>
+                <S.LegendColor color={'purple'} />
+                <S.ArrLabel>18</S.ArrLabel>
+              </S.ArrResume>
+            </S.Arrengements>
+          </S.MonthlyCalcs>
+        </S.Resume >
+        <S.Resume>
+          <S.ResumeTitle>Programação anual</S.ResumeTitle>
+          <S.MonthlyHours>
+            <S.MHLabel>Horas mínimas</S.MHLabel>
+            <S.MHValue>600</S.MHValue>
+          </S.MonthlyHours >
+          <S.MonthlyCalcs>
+            <S.Descriptions>
+              <S.Category>
+                <S.CatLabel>Ministério:</S.CatLabel>
+                <S.CatValue>514</S.CatValue>
+              </S.Category>
+              <S.Category>
+                <S.CatLabel>LDC:</S.CatLabel>
+                <S.CatValue>86</S.CatValue>
+              </S.Category>
+            </S.Descriptions>
+            <S.Arrengements>
+              <S.ArrResume>
+                <S.LegendColor color={'orange'} />
+                <S.ArrLabel>580</S.ArrLabel>
+              </S.ArrResume>
+              <S.ArrResume>
+                <S.LegendColor color={'purple'} />
+                <S.ArrLabel>20</S.ArrLabel>
+              </S.ArrResume>
+            </S.Arrengements>
+          </S.MonthlyCalcs>
+        </S.Resume >
       </S.Container>
-      <S.TalksList
-        contentContainerStyle={{
-          rowGap: 12,
-          paddingTop: 10,
-        }}>
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-      </S.TalksList>
+      <S.Container>
+        <S.ButtonsArea>
+          <S.Btn>
+            <S.BtnIconArea>
+              <ViewBigIcon />
+            </S.BtnIconArea>
+            <S.BtnName>Ver arranjos</S.BtnName>
+          </S.Btn>
+          <S.Btn>
+            <S.BtnIconArea>
+              <PlusIcon />
+            </S.BtnIconArea>
+            <S.BtnName>Adicionar arranjo</S.BtnName>
+          </S.Btn>
+        </S.ButtonsArea>
+      </S.Container>
     </S.Page>
   )
 
