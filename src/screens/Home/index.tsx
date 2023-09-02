@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as S from './styles'
 import HomeAgendaItem from '../../components/HomeAgendaItem'
 
@@ -6,6 +6,7 @@ import { icons } from '../../utils/imports'
 import HomeRevisitItem from '../../components/HomeRevisitItem'
 import { useMMKVObject } from 'react-native-mmkv'
 import { UserInfo } from '../../utils/types/user'
+import ModalComponent from '../../components/Modal'
 
 
 const events = [
@@ -65,6 +66,10 @@ const HomeScreen = () => {
 
   const [user] = useMMKVObject<UserInfo>('user')
 
+  const [modal, setModal] = useState({
+    showing: false,
+    type: ''
+  })
 
   return (
     <S.Page
@@ -74,6 +79,11 @@ const HomeScreen = () => {
         rowGap: 30,
         paddingBottom: 60
       }}>
+      <ModalComponent
+        visible={modal.showing}
+        setModal={setModal}
+        type={'newTalk'}
+      />
       <S.Container>
         <S.PageHead>
           <S.Welcome>
@@ -100,7 +110,10 @@ const HomeScreen = () => {
           </S.ScIconArea>
           <S.ScName numberOfLines={1}>Registrar dia</S.ScName>
         </S.Shortcut>
-        <S.Shortcut>
+        <S.Shortcut onPress={() => setModal({
+          showing: true,
+          type: 'newTalk'
+        })}>
           <S.ScIconArea>
             <icons.PlusIcon />
           </S.ScIconArea>

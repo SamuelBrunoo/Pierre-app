@@ -4,6 +4,7 @@ import ScheduleIcon from '../../assets/icons/schedule.svg'
 import TalksIcon from '../../assets/icons/talks.svg'
 
 import CheckIcon from '../../assets/icons/check.svg'
+import CheckLightIcon from '../../assets/icons/check_white.svg'
 import ClockIcon from '../../assets/icons/clock.svg'
 import PlusIcon from '../../assets/icons/plus.svg'
 import SendIcon from '../../assets/icons/send.svg'
@@ -20,6 +21,7 @@ export {
   ScheduleIcon,
   TalksIcon,
 
+  CheckLightIcon,
   CheckIcon,
   ClockIcon,
   PlusIcon,

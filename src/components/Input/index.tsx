@@ -14,11 +14,12 @@ type Props = {
   placeholder: string;
   value: string;
   onChange: (v: string) => void;
-  error: FieldError
+  error: FieldError;
+  textarea?: boolean;
 }
 
 
-const Input = ({ type, placeholder, value, onChange, error }: Props): JSX.Element => {
+const Input = ({ type, placeholder, value, onChange, error, textarea }: Props): JSX.Element => {
 
   const topAnim = useRef(new Animated.Value(14)).current
   const fontAnim = useRef(new Animated.Value(14)).current
@@ -75,8 +76,11 @@ const Input = ({ type, placeholder, value, onChange, error }: Props): JSX.Elemen
         secureTextEntry={type === 'password'}
         style={{
           ...s.input,
-          borderColor: error.has ? styles.errorMessage.color : 'transparent'
+          borderColor: error.has ? styles.errorMessage.color : 'transparent',
+          height: textarea ? 110 : 'auto',
+          textAlignVertical: 'top'
         }}
+        multiline={textarea ?? false}
         onFocus={() => animProp('focus')}
         onBlur={() => animProp('blur')}
         placeholderTextColor={s.placeholder.color}
