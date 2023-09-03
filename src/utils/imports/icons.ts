@@ -13,6 +13,7 @@ import ExpandIcon from '../../assets/icons/expand.svg'
 import ArrowThin from '../../assets/icons/arrow_thin.svg'
 import LocationIcon from '../../assets/icons/location.svg'
 import ViewBigIcon from '../../assets/icons/view_big.svg'
+import CalendarIcon from '../../assets/icons/calendar.svg'
 
 
 export {
@@ -31,4 +32,5 @@ export {
   ArrowThin,
   LocationIcon,
   ViewBigIcon,
+  CalendarIcon,
 }

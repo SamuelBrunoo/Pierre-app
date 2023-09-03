@@ -46,3 +46,36 @@ export const CheckBox = styled.View`
 `
 
 export const CheckLabel = styled.Text``
+
+export const DateTimeInfo = styled.View`
+  flex-direction: row;
+  justify-content: space-evenly;
+`
+
+export const InfoArea = styled.View`
+  align-items: baseline;
+`
+
+export const FieldLabel = styled.Text`
+  position: absolute;
+  left: 10px;
+  z-index: 2;
+  top: -17px;
+  font-size: 12px;
+  color: 'rgba(175, 175, 175, 1)';
+`
+
+export const InfoBox = styled.TouchableOpacity`
+  background-color: 'rgba(41, 41, 41, 1)';
+  border-radius: 4px;
+  width: fit-content;
+  height: 48px;
+  padding: 0 10px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+`
+
+export const DateString = styled.Text`
+  font-weight: 300;
+`
