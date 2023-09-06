@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import * as S from './styles'
+import React from 'react'
 import Picker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
-import { Alert } from 'react-native';
 
 
 type Props = {

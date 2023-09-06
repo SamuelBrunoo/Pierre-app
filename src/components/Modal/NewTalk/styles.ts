@@ -7,6 +7,7 @@ export const Bg = styled.View`
   flex: 1;
 `
 
+/* MapView */
 export const Box = styled.View`
   background-color: rgb(29, 29, 29);
   flex: 1;
@@ -15,6 +16,23 @@ export const Box = styled.View`
   row-gap: 20px;
 `
 
+export const MapViewWrapper = styled.View`
+  width: 100%;
+  height: 400px;
+  background-color: rgb(41, 41, 41);
+  border-radius: 4px;
+  overflow: hidden;
+`
+
+export const ConfirmBtn = styled.TouchableOpacity`
+  background-color: rgb(54, 54, 54);
+  padding: 10px;
+  align-self: center;
+`
+
+export const ConfirmBtnTxt = styled.Text``
+
+/* Component */
 export const Title = styled.Text`
   font-size: 24px;
   font-weight: 600;
@@ -24,6 +42,7 @@ export const Title = styled.Text`
 
 export const Content = styled.ScrollView`
   margin-top: 20px;
+  row-gap: 20px;
 `
 
 export const InputWrapper = styled.View`

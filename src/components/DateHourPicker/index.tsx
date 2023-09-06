@@ -1,6 +1,6 @@
 import React from 'react'
 import DatePicker from './DatePicker'
-import HourPicker from './HourPicker';
+import HourPicker from './HourPicker'
 
 
 type Props = {

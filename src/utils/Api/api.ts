@@ -2,6 +2,10 @@ import { Alert } from 'react-native'
 import auth from '@react-native-firebase/auth'
 import { LoginRes } from '../types/Api/login'
 import { verifySignInError } from './auxiliars'
+import { GetAddressRes } from '../types/Api/mapAdress'
+
+const baseMapsUrl = 'https://maps.googleapis.com/maps/api/geocode/json'
+const mapsApiKey = 'AIzaSyCmnvjnpmx8Ab_WC07MSuqnwTVI4nPAUxs'
 
 const login = async (email: string, pass: string): Promise<LoginRes> => {
 
@@ -75,7 +79,16 @@ const register = async (email: string, pass: string): Promise<LoginRes> => {
   return result
 }
 
+const getAddress = async (coords: { latitude: number, longitude: number }): Promise<GetAddressRes> => {
+  const res = await fetch(
+    `${baseMapsUrl}?latlng=${coords.latitude},${coords.longitude}&key=${mapsApiKey}`
+  )
+
+  return await res.json() as GetAddressRes
+}
+
 
 export default ({
-  login
+  login,
+  getAddress
 })
