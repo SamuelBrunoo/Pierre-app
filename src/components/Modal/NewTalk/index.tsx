@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as S from './styles'
 import Input from '../../Input'
 import { FieldsErrors } from '../../../utils/types/forms/newTalk'
@@ -7,11 +7,13 @@ import { CalendarIcon, CheckLightIcon, ClockIcon } from '../../../utils/imports/
 import DateHourPicker from '../../DateHourPicker'
 import { Alert, Text, View } from 'react-native'
 import MapArea from '../../MapArea'
-import MapView, { Callout, MapPressEvent, Marker, MapMarker, LongPressEvent } from 'react-native-maps'
+import MapView, { LongPressEvent } from 'react-native-maps'
 import Api from '../../../utils/Api'
 import { AdressInfo } from '../../../utils/types/Api/mapAdress'
 import { getUserLocation } from '../../../utils/toolbox/location/getUserLocation'
 import { Coordenates, CustomMarker } from '../../../utils/types/maps'
+import Button from '../../Button'
+import MapViewFragment from './MapViewFragment'
 
 
 type Props = {
@@ -91,7 +93,7 @@ const NewTalk = ({ handleClose }: Props) => {
   const [mapCoord, setMapCoord] = useState<Coordenates>({
     latitude: 0, longitude: 0
   })
-  const [marker, setMarker] = useState<CustomMarker | null>()
+  const [marker, setMarker] = useState<CustomMarker | null>(null)
   const [address, setAddress] = useState<AdressInfo | null>(null)
   const [snap, setSnap] = useState<string | null>(null)
 
@@ -136,6 +138,9 @@ const NewTalk = ({ handleClose }: Props) => {
   }
 
   const saveLocation = async () => {
+
+    // fazer verificação se tem internet
+
     const mapEl = mapViewRef.current
     if (mapEl) {
       setUserVisibility(false)
@@ -156,46 +161,19 @@ const NewTalk = ({ handleClose }: Props) => {
     setMarker(newCoords)
   }
 
+  const handleSave = () => {
+    // console.log info
+  }
+
   const renderMap = () => {
-    return (
-      <S.MapViewWrapper>
-        <Fragment>
-          <MapView
-            ref={mapViewRef}
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'rgb(41, 41, 41)'
-            }}
-            showsUserLocation={userVisibility}
-            initialRegion={{
-              latitude: mapCoord.latitude,
-              longitude: mapCoord.longitude,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.005,
-            }}
-            // customMapStyle={customStyle}
-            onRegionChange={(region) => {
-              setMapCoord({
-                latitude: region.latitude,
-                longitude: region.longitude,
-              })
-            }}
-            onLongPress={e => handlePressMap(e)}
-          >
-            {marker &&
-              <Marker
-                coordinate={{
-                  latitude: marker.latitude,
-                  longitude: marker.longitude,
-                }}
-                title={marker.title}
-              />
-            }
-          </MapView>
-        </Fragment>
-      </S.MapViewWrapper>
-    )
+    return <MapViewFragment
+      userVisibility={userVisibility}
+      mapViewRef={mapViewRef}
+      mapCoord={mapCoord}
+      setMapCoord={setMapCoord}
+      handlePressMap={handlePressMap}
+      marker={marker}
+    />
   }
 
   useEffect(() => {
@@ -206,12 +184,6 @@ const NewTalk = ({ handleClose }: Props) => {
         longitude: userLocation.longitude
       })
     })()
-
-
-    setMarker({
-      latitude: -27.49169350490711,
-      longitude: -48.7774863843426
-    })
   }, [])
 
 
@@ -219,11 +191,7 @@ const NewTalk = ({ handleClose }: Props) => {
     <S.Bg>
       <S.Box>
         <S.Title>Nova conversa</S.Title>
-        <S.Content
-          contentContainerStyle={{
-            rowGap: 20,
-          }}
-        >
+        <S.Main>
           {mapVisibility &&
             <>
               {renderMap()}
@@ -234,96 +202,119 @@ const NewTalk = ({ handleClose }: Props) => {
           }
           {!mapVisibility &&
             <>
-              <S.CheckBoxArea onPress={() => setIsNew(!isNew)}>
-                <S.CheckBox>
-                  {isNew && <CheckLightIcon width={15} height={15} />}
-                </S.CheckBox>
-                <S.CheckLabel>Novo</S.CheckLabel>
-              </S.CheckBoxArea>
-              <S.InputWrapper>
-                {isNew ?
-                  <Input
-                    type='none'
-                    value={name}
-                    onChange={setName}
-                    placeholder='Nome da pessoa'
-                    error={errors.name}
-                  />
-                  :
-                  <Select
-                    options={persons}
-                    value={name}
-                    onChange={setName}
-                    placeholder='Nome da pessoa'
-                    error={errors.name}
-                  />
-                }
-              </S.InputWrapper>
-              {isNew &&
-                <>
-                  <MapArea
-                    mapExibitionToggler={handleMapClick}
-                    snapUrl={snap}
-                    address={address}
-                  />
-                  <Select
-                    options={territories}
-                    value={name}
-                    onChange={setName}
-                    placeholder='Território'
-                    error={errors.name}
-                  />
-                </>
-              }
-              <S.InputWrapper>
-                <Input
-                  type='none'
-                  textarea={true}
-                  error={errors.notes}
-                  onChange={setNotes}
-                  placeholder='Anotação'
-                  value={notes}
+              <S.Content
+                contentContainerStyle={{
+                  rowGap: 10,
+                  paddingBottom: 40,
+                  justifyContent: 'space-between',
+                  flexGrow: 1
+                }}
+              >
+                <S.ContentPrincipal>
+                  <S.CheckBoxArea onPress={() => setIsNew(!isNew)}>
+                    <S.CheckBox>
+                      {isNew && <CheckLightIcon width={15} height={15} />}
+                    </S.CheckBox>
+                    <S.CheckLabel>Novo</S.CheckLabel>
+                  </S.CheckBoxArea>
+                  <S.InputWrapper>
+                    {isNew ?
+                      <Input
+                        type='none'
+                        value={name}
+                        onChange={setName}
+                        placeholder='Nome da pessoa'
+                        error={errors.name}
+                      />
+                      :
+                      <Select
+                        options={persons}
+                        value={name}
+                        onChange={setName}
+                        placeholder='Nome da pessoa'
+                        error={errors.name}
+                      />
+                    }
+                  </S.InputWrapper>
+                  {isNew &&
+                    <>
+                      <MapArea
+                        mapExibitionToggler={handleMapClick}
+                        snapUrl={snap}
+                        address={address}
+                      />
+                      <Select
+                        options={territories}
+                        value={name}
+                        onChange={setName}
+                        placeholder='Território'
+                        error={errors.name}
+                      />
+                    </>
+                  }
+                  <S.InputWrapper>
+                    <Input
+                      type='none'
+                      textarea={true}
+                      error={errors.notes}
+                      onChange={setNotes}
+                      placeholder='Anotação'
+                      value={notes}
+                    />
+                  </S.InputWrapper>
+                </S.ContentPrincipal>
+                <S.DateTimeInfo>
+                  <S.InfoArea>
+                    <S.FieldLabel>Data</S.FieldLabel>
+                    <S.InfoBox
+                      activeOpacity={.8}
+                      onPress={() => setPickerConfig({
+                        showing: true,
+                        type: 'date'
+                      })}
+                    >
+                      <S.DateString>
+                        {`${String(date.getDate()).padStart(2, '0')
+                          }/${String(date.getMonth() + 1).padStart(2, '0')
+                          }/${String(date.getFullYear())
+                          }`
+                        }
+                      </S.DateString>
+                      <CalendarIcon />
+                    </S.InfoBox>
+                  </S.InfoArea>
+                  <S.InfoArea>
+                    <S.FieldLabel>Hora</S.FieldLabel>
+                    <S.InfoBox
+                      activeOpacity={.8}
+                      onPress={() => setPickerConfig({
+                        showing: true,
+                        type: 'hour'
+                      })}
+                    >
+                      <S.DateString>
+                        {
+                          `${String(date.getHours()).padStart(2, '0')
+                          }:${String(date.getMinutes()).padStart(2, '0')}`
+                        }
+                      </S.DateString>
+                      <ClockIcon />
+                    </S.InfoBox>
+                  </S.InfoArea>
+                </S.DateTimeInfo>
+              </S.Content>
+              <S.BtnsArea>
+                <Button
+                  type='cancel'
+                  fn={handleClose}
+                  text='Cancelar'
                 />
-              </S.InputWrapper>
-              <S.DateTimeInfo>
-                <S.InfoArea>
-                  <S.FieldLabel>Data</S.FieldLabel>
-                  <S.InfoBox
-                    activeOpacity={.8}
-                    onPress={() => setPickerConfig({
-                      showing: true,
-                      type: 'date'
-                    })}
-                  >
-                    <S.DateString>
-                      {`${String(date.getDate()).padStart(2, '0')
-                        }/${String(date.getMonth() + 1).padStart(2, '0')
-                        }/${String(date.getFullYear())
-                        }`
-                      }
-                    </S.DateString>
-                    <CalendarIcon />
-                  </S.InfoBox>
-                </S.InfoArea>
-                <S.InfoArea>
-                  <S.FieldLabel>Hora</S.FieldLabel>
-                  <S.InfoBox
-                    activeOpacity={.8}
-                    onPress={() => setPickerConfig({
-                      showing: true,
-                      type: 'hour'
-                    })}
-                  >
-                    <S.DateString>
-                      {
-                        `${String(date.getHours()).padStart(2, '0')
-                        }:${String(date.getMinutes()).padStart(2, '0')}`
-                      }
-                    </S.DateString>
-                    <ClockIcon />
-                  </S.InfoBox>
-                </S.InfoArea>
-              </S.DateTimeInfo>
+                <Button
+                  type='confirm'
+                  fn={handleSave}
+                  text='Salvar'
+                />
+              </S.BtnsArea>
             </>
           }
           {pickerConfig.showing &&
@@ -333,7 +324,7 @@ const NewTalk = ({ handleClose }: Props) => {
               onSet={pickerConfig.type === 'date' ? handleDate : handleTime}
             />
           }
-        </S.Content>
+        </S.Main>
       </S.Box>
     </S.Bg>
   )

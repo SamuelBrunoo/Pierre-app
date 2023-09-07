@@ -9,6 +9,13 @@ buildscript {
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "25.2.9519653"
+        googlePlayServicesVersion = "+" // default: "+"
+        firebaseMessagingVersion = "+" // default: "21.1.0"
+
+        // Other settings
+        compileSdkVersion = 33 // default: 23
+        buildToolsVersion = "33" // default: "23.0.1"
+        targetSdkVersion = 33 // default: 23
     }
     repositories {
         google()
@@ -17,6 +24,6 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("com.google.gms:google-services:4.3.15")
+        classpath("com.google.gms:google-services:4.3.3")
     }
 }

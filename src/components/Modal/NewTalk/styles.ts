@@ -40,9 +40,17 @@ export const Title = styled.Text`
   text-align: center;
 `
 
-export const Content = styled.ScrollView`
+export const Main = styled.View`
   margin-top: 20px;
-  row-gap: 20px;
+  justify-content: space-between;
+  flex: 1;
+  row-gap: 40px;
+`
+
+export const Content = styled.ScrollView``
+
+export const ContentPrincipal = styled.View`
+  row-gap: 10px;
 `
 
 export const InputWrapper = styled.View`
@@ -97,4 +105,10 @@ export const InfoBox = styled.TouchableOpacity`
 
 export const DateString = styled.Text`
   font-weight: 300;
+`
+
+export const BtnsArea = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 `
