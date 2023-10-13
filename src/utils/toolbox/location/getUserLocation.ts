@@ -51,18 +51,26 @@ export const getUserLocation = async (): Promise<UserLocation> => {
       latitude: 0
     }
   }
-  Geolocation.getCurrentPosition(pos => userGeo = pos,
-    (error) => console.log(error.code),
-    {
-      enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 10000,
-      accuracy: {
-        android: 'high',
-        ios: 'nearestTenMeters'
+
+  return new Promise((resolve, reject) => {
+    Geolocation.getCurrentPosition(
+      pos => {
+        resolve(pos)
+      },
+      () => {
+        reject(userGeo)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 10000,
+        accuracy: {
+          android: 'high',
+          ios: 'nearestTenMeters'
+        }
       }
-    }
-  )
+    )
+  })
 
   return userGeo ?? null
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as S from './styles'
 import HomeAgendaItem from '../../components/HomeAgendaItem'
 
@@ -7,7 +7,10 @@ import HomeRevisitItem from '../../components/HomeRevisitItem'
 import { useMMKVObject } from 'react-native-mmkv'
 import { UserInfo } from '../../utils/types/user'
 import ModalComponent from '../../components/Modal'
-
+import Api from '../../utils/Api'
+import { RefreshControl } from 'react-native'
+import { padValue } from '../../utils/toolbox/parsers/padValue'
+import { ActivityType } from '../../utils/types/activity'
 
 const events = [
   {
@@ -19,7 +22,7 @@ const events = [
     name: 'Estudo',
     time: '18:00 - 19:00',
     done: true,
-    studentName: 'Marcinha'
+    studentName: 'Marcinha',
   },
   {
     name: 'Carrinho com Beltrana',
@@ -60,16 +63,49 @@ const revisits = [
   },
 ]
 
-
-
 const HomeScreen = () => {
+  const [user, setUserInfo] = useMMKVObject<UserInfo>('user')
 
-  const [user] = useMMKVObject<UserInfo>('user')
+  const [modal, setModal] = useState({ showing: false, type: '' })
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
-  const [modal, setModal] = useState({
-    showing: false,
-    type: ''
-  })
+  const refreshInfo = async () => {
+    setIsRefreshing(true)
+    if (user) {
+      await Api.getUserInfo(user.publisher_id).then(res => {
+        if (res.ok) {
+          setUserInfo({ logged: true, ...res.info })
+        }
+      })
+    }
+    setIsRefreshing(false)
+  }
+
+  const renderSchedule = () => {
+    const today = new Date()
+    const dateString =
+      `${today.getFullYear()}-` +
+      `${today.getMonth() + 1}-` +
+      `${today.getDate()}`
+
+    let actEls: ActivityType[] = []
+
+    user?.schedule.weekly[(today.getDay() as 0, 1, 2, 3, 4, 5, 6)].forEach(
+      a => {
+        actEls.push(a)
+      },
+    )
+
+    user?.schedule.puntuals.forEach(p => {
+      if (p.date === dateString) actEls = [...actEls, ...p.activities]
+    })
+
+    return actEls.map((a, k) => <HomeAgendaItem key={k} event={a} />)
+  }
+
+  useEffect(() => {
+    // Api.updateT(user?.publisher_id as string)
+  }, [user])
 
   return (
     <S.Page
@@ -77,8 +113,11 @@ const HomeScreen = () => {
       contentContainerStyle={{
         justifyContent: 'flex-start',
         rowGap: 30,
-        paddingBottom: 60
-      }}>
+        paddingBottom: 60,
+      }}
+      refreshControl={
+        <RefreshControl refreshing={isRefreshing} onRefresh={refreshInfo} />
+      }>
       <ModalComponent
         visible={modal.showing}
         setModal={setModal}
@@ -97,9 +136,9 @@ const HomeScreen = () => {
           <S.AgendaList
             nestedScrollEnabled={true}
             contentContainerStyle={{
-              rowGap: 10
+              rowGap: 10,
             }}>
-            {events.map((ev, k) => <HomeAgendaItem key={k} event={ev} />)}
+            {renderSchedule()}
           </S.AgendaList>
         </S.TodayAgenda>
       </S.Container>
@@ -110,10 +149,13 @@ const HomeScreen = () => {
           </S.ScIconArea>
           <S.ScName numberOfLines={1}>Registrar dia</S.ScName>
         </S.Shortcut>
-        <S.Shortcut onPress={() => setModal({
-          showing: true,
-          type: 'newTalk'
-        })}>
+        <S.Shortcut
+          onPress={() =>
+            setModal({
+              showing: true,
+              type: 'newTalk',
+            })
+          }>
           <S.ScIconArea>
             <icons.PlusIcon />
           </S.ScIconArea>
@@ -136,26 +178,40 @@ const HomeScreen = () => {
             </S.Seemore>
           </S.TopBlock>
           <S.ReportList>
-            <S.Row>
-              <S.TableLabel>Horas</S.TableLabel>
-              <S.TableValue>50</S.TableValue>
-            </S.Row>
-            <S.Row>
-              <S.TableLabel>Revisitas</S.TableLabel>
-              <S.TableValue>50</S.TableValue>
-            </S.Row>
-            <S.Row>
-              <S.TableLabel>Estudos</S.TableLabel>
-              <S.TableValue>50</S.TableValue>
-            </S.Row>
-            <S.Row>
-              <S.TableLabel>Publicações</S.TableLabel>
-              <S.TableValue>50</S.TableValue>
-            </S.Row>
-            <S.Row>
-              <S.TableLabel>Vídeos</S.TableLabel>
-              <S.TableValue>50</S.TableValue>
-            </S.Row>
+            {user?.current_report && (
+              <>
+                <S.Row>
+                  <S.TableLabel>Horas</S.TableLabel>
+                  <S.TableValue>
+                    {padValue(user.current_report.hours)}
+                  </S.TableValue>
+                </S.Row>
+                <S.Row>
+                  <S.TableLabel>Revisitas</S.TableLabel>
+                  <S.TableValue>
+                    {padValue(user.current_report.revisits)}
+                  </S.TableValue>
+                </S.Row>
+                <S.Row>
+                  <S.TableLabel>Estudos</S.TableLabel>
+                  <S.TableValue>
+                    {padValue(user.current_report.studies)}
+                  </S.TableValue>
+                </S.Row>
+                <S.Row>
+                  <S.TableLabel>Publicações</S.TableLabel>
+                  <S.TableValue>
+                    {padValue(user.current_report.publications)}
+                  </S.TableValue>
+                </S.Row>
+                <S.Row>
+                  <S.TableLabel>Vídeos</S.TableLabel>
+                  <S.TableValue>
+                    {padValue(user.current_report.videos)}
+                  </S.TableValue>
+                </S.Row>
+              </>
+            )}
           </S.ReportList>
         </S.InfoResume>
 
@@ -170,14 +226,14 @@ const HomeScreen = () => {
           <S.RevisitsList
             nestedScrollEnabled={true}
             contentContainerStyle={{ rowGap: 10 }}>
-            {revisits.map((r, k) => <HomeRevisitItem key={k} info={r} />)}
+            {revisits.map((r, k) => (
+              <HomeRevisitItem key={k} info={r} />
+            ))}
           </S.RevisitsList>
         </S.InfoResume>
       </S.Container>
     </S.Page>
   )
-
 }
-
 
 export default HomeScreen

@@ -33,7 +33,6 @@ const MapViewFragment = ({
             height: '100%',
             backgroundColor: 'rgb(41, 41, 41)'
           }}
-          showsUserLocation={userVisibility}
           initialRegion={{
             latitude: mapCoord.latitude,
             longitude: mapCoord.longitude,

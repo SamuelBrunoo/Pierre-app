@@ -1,8 +1,8 @@
-import { UserInfo } from "../user";
+import { AuthUser } from "../user";
 
 export type LoginRes = {
   ok: true;
-  userInfo: UserInfo;
+  userInfo: AuthUser;
 } | {
   ok: false;
   error: FieldError
