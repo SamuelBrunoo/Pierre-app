@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as S from './styles'
 import NetInfo from '@react-native-community/netinfo'
 import Input from '../../Input'
-import {FieldsErrors} from '../../../utils/types/forms/newTalk'
+import { FieldsErrors } from '../../../utils/types/forms/newTalk'
 import Select from '../../Select'
 import {
   CalendarIcon,
@@ -10,15 +10,18 @@ import {
   ClockIcon,
 } from '../../../utils/imports/icons'
 import DateHourPicker from '../../DateHourPicker'
-import {Alert, Text, View} from 'react-native'
+import { Alert, Text, View } from 'react-native'
 import MapArea from '../../MapArea'
-import MapView, {LongPressEvent} from 'react-native-maps'
+import MapView, { LongPressEvent } from 'react-native-maps'
 import Api from '../../../utils/Api'
-import {AdressInfo} from '../../../utils/types/Api/mapAdress'
-import {getUserLocation} from '../../../utils/toolbox/location/getUserLocation'
-import {Coordenates, CustomMarker} from '../../../utils/types/maps'
+import { AdressInfo } from '../../../utils/types/Api/mapAdress'
+import { getUserLocation } from '../../../utils/toolbox/location/getUserLocation'
+import { Coordenates, CustomMarker } from '../../../utils/types/maps'
 import Button from '../../Button'
 import MapViewFragment from './MapViewFragment'
+import { useMMKV, useMMKVObject } from 'react-native-mmkv'
+import { LocalUserInfo } from '../../../utils/types/_user/local'
+import { Territory } from '../../../utils/types/_ministery/territory'
 
 type Props = {
   handleClose: () => void
@@ -86,11 +89,17 @@ const persons = [
   },
 ]
 
-const NewTalk = ({handleClose}: Props) => {
+const NewTalk = ({ handleClose }: Props) => {
+  const [user] = useMMKVObject<LocalUserInfo>('user')
+
   const mapViewRef = useRef<MapView | null>(null)
   const [name, setName] = useState('')
+  const [neighborhood, setNeighborhood] = useState<{
+    id: string
+    name: string
+  }>(user?.territories[0] ?? { id: '', name: '' })
   const [notes, setNotes] = useState('')
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState((() => new Date())())
   const [mapVisibility, setMapVisibility] = useState(false)
   const [userVisibility, setUserVisibility] = useState(true)
   const [mapCoord, setMapCoord] = useState<Coordenates>({
@@ -102,15 +111,15 @@ const NewTalk = ({handleClose}: Props) => {
   const [snap, setSnap] = useState<string | null>(null)
 
   const [errors, setErrors] = useState<FieldsErrors>({
-    name: {has: false, message: 'Digite ou escolha o nome da pessoa'},
-    notes: {has: false, message: 'Por favor, faça uma anotação'},
-    territory: {has: false, message: 'Digite o território'},
+    name: { has: false, message: 'Digite ou escolha o nome da pessoa' },
+    notes: { has: false, message: 'Por favor, faça uma anotação' },
+    territory: { has: false, message: 'Digite o território' },
   })
   const [isNew, setIsNew] = useState(false)
   const [pickerConfig, setPickerConfig] = useState<{
     showing: boolean
     type: 'date' | 'hour'
-  }>({showing: false, type: 'date'})
+  }>({ showing: false, type: 'date' })
 
   const handleDate = (value: number) => {
     setPickerConfig({
@@ -172,7 +181,7 @@ const NewTalk = ({handleClose}: Props) => {
       // picture snapshot
       const mapEl = mapViewRef.current
       if (mapEl) {
-        const file = await mapEl.takeSnapshot({format: 'jpg', result: 'file'})
+        const file = await mapEl.takeSnapshot({ format: 'jpg', result: 'file' })
         setSnap(file)
         setMapVisibility(false)
       }
@@ -193,8 +202,8 @@ const NewTalk = ({handleClose}: Props) => {
   const verifyErrors = () => {
     // const [nameError, notesError, mapCoordError, markerError, addressError] = [
     const fields = [
-      {field: 'name', hasError: name.trim().length === 0},
-      {field: 'notes', hasError: notes.trim().length === 0},
+      { field: 'name', hasError: name.trim().length === 0 },
+      { field: 'notes', hasError: notes.trim().length === 0 },
       {
         field: 'mapCoord',
         hasError: mapCoord.latitude === 0 || mapCoord.longitude === 0,
@@ -203,7 +212,7 @@ const NewTalk = ({handleClose}: Props) => {
         field: 'marker',
         hasError: !marker || marker.latitude === 0 || marker.longitude === 0,
       },
-      {field: 'address', hasError: !address || address.trim().length === 0},
+      { field: 'address', hasError: !address || address.trim().length === 0 },
     ]
 
     // verify if is new (then, if has location setted)
@@ -211,39 +220,32 @@ const NewTalk = ({handleClose}: Props) => {
   }
 
   const handleSave = async () => {
+    const hasErrors = verifyErrors()
     const hasConnection = await NetInfo.fetch().then(s => s.isConnected)
 
-    const resumeInfo = {
-      name,
-      notes,
-      date,
-      mapCoord,
-      marker,
-      address,
-      hasSnap: typeof snap === 'string',
-    }
-
-    // verificar se todos os valores estão preenchidos
-    const hasErrors = verifyErrors()
-
-    // verificar internet
     if (hasConnection) {
       if (!hasErrors) {
-        // se sim, enviar para FB
-        const save = await Api.saveTalk(
-          // 2 props patterns (1 for new talk & 1 for existing talk)
-          name,
-          notes,
-          date,
-          mapCoord,
-          marker ?? mapCoord,
-          address as string,
-          // talkId ???, notes, date,
-        )
+        const save = isNew
+          ? await Api.saveTalk(user?.id as string, {
+              address: address as string,
+              date,
+              neighborhood: neighborhood.name,
+              marker: marker ?? mapCoord,
+              name,
+              notes,
+            })
+          : await Api.updateTalk()
+
+        if (save.ok) {
+          handleClose()
+          // save in local the returned parsed value?
+        }
       } else {
+        // show errors
       }
     } else {
-      // senão, salvar local
+      // save in local
+      // or use firebase off-line saving
     }
   }
 
@@ -272,7 +274,8 @@ const NewTalk = ({handleClose}: Props) => {
   }
 
   useEffect(() => {
-    getUserLocation().then(({coords: userLocation}) => {
+    getUserLocation().then(({ coords: userLocation }) => {
+      console.log(userLocation)
       setMapCoord({
         latitude: userLocation.latitude,
         longitude: userLocation.longitude,
@@ -327,8 +330,12 @@ const NewTalk = ({handleClose}: Props) => {
                     ) : (
                       <Select
                         options={persons}
-                        value={name}
-                        onChange={setName}
+                        value={
+                          user?.territories.find(
+                            t => t.id === neighborhood.id,
+                          ) as Territory
+                        }
+                        onChange={v => setName(v.name)}
                         placeholder="Nome da pessoa"
                         error={errors.name}
                       />
@@ -341,13 +348,19 @@ const NewTalk = ({handleClose}: Props) => {
                         snapUrl={snap}
                         address={address}
                       />
+                      {/* if has territories */}
                       <Select
-                        options={territories}
-                        value={name}
-                        onChange={setName}
+                        options={user?.territories as Territory[]}
+                        value={
+                          user?.territories.find(
+                            t => t.id === neighborhood.id,
+                          ) as Territory
+                        }
+                        onChange={t => setNeighborhood(t)}
                         placeholder="Território"
                         error={errors.name}
                       />
+                      {/* else show input disabled: 'Nenhum território cadastrado' */}
                     </>
                   )}
                   <S.InputWrapper>

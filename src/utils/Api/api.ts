@@ -4,11 +4,12 @@ import firestore from '@react-native-firebase/firestore'
 import { LoginRes } from '../types/Api/login'
 import { verifySignInError } from './auxiliars'
 import { GetAddressRes } from '../types/Api/mapAdress'
-import { SaveTalkRes } from '../types/Api/saveTalk'
+import { SaveTalkProps, SaveTalkRes } from '../types/Api/saveTalk'
 import { Coordenates } from '../types/maps'
 import { UserInfoRes } from '../types/Api/getUserInfo'
 import { DayRevisit, RevisitFStore } from '../types/_ministery/revisit'
 import { FSUser } from '../types/_user/firestore'
+import { dataToFB } from '../toolbox/parsers/dataToFB'
 
 const baseMapsUrl = 'https://maps.googleapis.com/maps/api/geocode/json'
 const mapsApiKey = 'AIzaSyCmnvjnpmx8Ab_WC07MSuqnwTVI4nPAUxs'
@@ -227,18 +228,31 @@ const getAddress = async (coords: {
   return (await res.json()) as GetAddressRes
 }
 
+const updateTalk = async (): Promise<{ ok: boolean }> => {
+  const result = {
+    ok: true,
+  }
+
+  return result
+}
+
 const saveTalk = async (
-  name: string,
-  notes: string,
-  date: any,
-  mapCoord: Coordenates,
-  marker: Coordenates,
-  address: string,
+  userId: string,
+  talk: SaveTalkProps,
 ): Promise<SaveTalkRes> => {
-  //
   let result: SaveTalkRes = {
     ok: true,
   }
+
+  await firestore()
+    .collection('talks')
+    .add(dataToFB(userId, talk))
+    .catch(() => {
+      result = {
+        ok: false,
+        error: 'Oops.. Falha ao atualizar. Tente novamente mais tarde.',
+      }
+    })
 
   return result
 }
@@ -249,5 +263,6 @@ export default {
   getUserInfo,
   getAddress,
   saveTalk,
+  updateTalk,
   updateT: (userId: string) => null,
 }

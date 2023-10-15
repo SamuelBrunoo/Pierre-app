@@ -1,4 +1,5 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
+import { Coordenates } from '../maps'
 
 export type DayRevisit = {
   personName: string
@@ -9,12 +10,17 @@ export type DayRevisit = {
 
 export type RevisitFStore = {
   address: string
-  last_date: FirebaseFirestoreTypes.Timestamp
-  location: FirebaseFirestoreTypes.GeoPoint
+  last_date: FBTimestamp
+  location: Coordenates
   neighborhood: string
   observations: string
   person_name: string
   publisher_id: string
   stage: number
   visits: any[]
+}
+
+type FBTimestamp = {
+  seconds: number
+  nanoseconds: number
 }
