@@ -6,13 +6,13 @@ import Api from '../../utils/Api'
 import { Alert } from 'react-native'
 import { FieldsErrors } from '../../utils/types/loginForm'
 import useStore from '../../store'
-import { UserInfo } from '../../utils/types/user'
+import { LocalUserInfo } from '../../utils/types/_user/local'
 import { useMMKVObject } from 'react-native-mmkv'
 
 const LoginScreen = () => {
   const navigation = useNavigation<any>()
   const User = useStore(state => state.User)
-  const [, setLocalUser] = useMMKVObject<UserInfo>('user')
+  const [, setLocalUser] = useMMKVObject<LocalUserInfo>('user')
 
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
@@ -33,6 +33,8 @@ const LoginScreen = () => {
             ...userInfo.info,
           })
           navigation.navigate('Main', { screen: 'Home' })
+        } else {
+          Alert.alert('Houve um erro, tente novamente depois')
         }
       } else {
         let wrongFields = { ...errors }
@@ -59,7 +61,7 @@ const LoginScreen = () => {
     setPass(t)
   }
 
-  const saveInfoInLocal = (userInfo: UserInfo) => {
+  const saveInfoInLocal = (userInfo: LocalUserInfo) => {
     User.storeInfo(userInfo)
     setLocalUser(userInfo)
   }

@@ -5,36 +5,12 @@ import HomeAgendaItem from '../../components/HomeAgendaItem'
 import { icons } from '../../utils/imports'
 import HomeRevisitItem from '../../components/HomeRevisitItem'
 import { useMMKVObject } from 'react-native-mmkv'
-import { UserInfo } from '../../utils/types/user'
+import { LocalUserInfo } from '../../utils/types/_user/local'
 import ModalComponent from '../../components/Modal'
 import Api from '../../utils/Api'
 import { RefreshControl } from 'react-native'
 import { padValue } from '../../utils/toolbox/parsers/padValue'
-import { ActivityType } from '../../utils/types/activity'
-
-const events = [
-  {
-    name: 'Carrinho com Beltrana',
-    time: '14:00 - 16:00',
-    done: true,
-  },
-  {
-    name: 'Estudo',
-    time: '18:00 - 19:00',
-    done: true,
-    studentName: 'Marcinha',
-  },
-  {
-    name: 'Carrinho com Beltrana',
-    time: '14:00 - 16:00',
-    done: true,
-  },
-  {
-    name: 'Carrinho com Beltrana',
-    time: '14:00 - 16:00',
-    done: true,
-  },
-]
+import { ActivityType } from '../../utils/types/_ministery/activity'
 
 const revisits = [
   {
@@ -64,7 +40,7 @@ const revisits = [
 ]
 
 const HomeScreen = () => {
-  const [user, setUserInfo] = useMMKVObject<UserInfo>('user')
+  const [user, setUserInfo] = useMMKVObject<LocalUserInfo>('user')
 
   const [modal, setModal] = useState({ showing: false, type: '' })
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -72,7 +48,7 @@ const HomeScreen = () => {
   const refreshInfo = async () => {
     setIsRefreshing(true)
     if (user) {
-      await Api.getUserInfo(user.publisher_id).then(res => {
+      await Api.getUserInfo(user.id).then(res => {
         if (res.ok) {
           setUserInfo({ logged: true, ...res.info })
         }
@@ -105,6 +81,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     // Api.updateT(user?.publisher_id as string)
+    // if (user) console.log(user)
   }, [user])
 
   return (
@@ -226,7 +203,7 @@ const HomeScreen = () => {
           <S.RevisitsList
             nestedScrollEnabled={true}
             contentContainerStyle={{ rowGap: 10 }}>
-            {revisits.map((r, k) => (
+            {(user?.dayRevisits ?? []).map((r, k) => (
               <HomeRevisitItem key={k} info={r} />
             ))}
           </S.RevisitsList>

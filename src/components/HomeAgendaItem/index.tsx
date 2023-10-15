@@ -3,7 +3,7 @@ import * as S from './styles'
 import { Text } from 'react-native'
 
 import { CheckIcon } from '../../utils/imports/icons'
-import { ActivityType } from '../../utils/types/activity'
+import { ActivityType } from '../../utils/types/_ministery/activity'
 import GLOBALS from '../../utils/defaults/GLOBALS'
 
 type PropsType = {

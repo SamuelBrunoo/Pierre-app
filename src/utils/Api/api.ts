@@ -6,7 +6,9 @@ import { verifySignInError } from './auxiliars'
 import { GetAddressRes } from '../types/Api/mapAdress'
 import { SaveTalkRes } from '../types/Api/saveTalk'
 import { Coordenates } from '../types/maps'
-import { UserFStoreInfo, UserInfoRes } from '../types/Api/getUserInfo'
+import { UserInfoRes } from '../types/Api/getUserInfo'
+import { DayRevisit, RevisitFStore } from '../types/_ministery/revisit'
+import { FSUser } from '../types/_user/firestore'
 
 const baseMapsUrl = 'https://maps.googleapis.com/maps/api/geocode/json'
 const mapsApiKey = 'AIzaSyCmnvjnpmx8Ab_WC07MSuqnwTVI4nPAUxs'
@@ -20,7 +22,6 @@ const login = async (email: string, pass: string): Promise<LoginRes> => {
         userInfo: {
           email: user.email as string,
           id: user.uid,
-          logged: true,
         },
       }),
     )
@@ -47,7 +48,6 @@ const register = async (email: string, pass: string): Promise<LoginRes> => {
     userInfo: {
       email: '',
       id: '',
-      logged: false,
     },
   }
 
@@ -60,7 +60,6 @@ const register = async (email: string, pass: string): Promise<LoginRes> => {
           userInfo: {
             email: user.email as string,
             id: user.uid,
-            logged: true,
           },
         }),
     )
@@ -88,16 +87,35 @@ const getUserInfo = async (userId: string): Promise<UserInfoRes> => {
   }
 
   const user = await firestore().collection('users').doc(userId).get()
+  let revisits: RevisitFStore[] = []
 
-  ret = user.exists
-    ? {
-        ok: true,
-        info: {
-          ...(user.data() as UserFStoreInfo),
-          publisher_id: user.id,
-        },
-      }
-    : { ok: false }
+  await firestore()
+    .collection('talks')
+    .where('publisher_id', '==', userId as string)
+    .get()
+    .then(res =>
+      res.docs.forEach(r => {
+        const data = {
+          ...(r.data() as RevisitFStore),
+          id: r.id,
+        }
+        revisits.push(data)
+      }),
+    )
+
+  if (user.exists) {
+    const data = {
+      ...(user.data() as FSUser),
+      id: userId,
+      dayRevisits: revisits,
+      logged: true,
+    }
+
+    ret = {
+      ok: true,
+      info: data,
+    }
+  }
 
   return ret
 }

@@ -1,7 +1,9 @@
 import { UserFStoreInfo } from './Api/getUserInfo'
+import { DayRevisit } from './dayRevisit'
 
-export interface UserInfo extends UserFStoreInfo {
+export interface LocalUserInfo extends UserFStoreInfo {
   logged: boolean
+  dayRevisits: DayRevisit[]
 }
 
 export type AuthUser = {

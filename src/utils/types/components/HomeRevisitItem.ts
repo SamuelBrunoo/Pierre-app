@@ -1,8 +1,5 @@
+import { DayRevisit, RevisitFStore } from "../_ministery/revisit"
+
 export type HomeRevisitItemProps = {
-  info: {
-    personName: string;
-    location: string;
-    lastVisitDate: string;
-    id: any;
-  }
+  info: RevisitFStore
 }
