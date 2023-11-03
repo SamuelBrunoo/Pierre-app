@@ -5,17 +5,9 @@ export const dataToFB = (
   userId: string,
   talk: SaveTalkProps,
 ): RevisitFStore => {
-  const getTimestampObj = (d: Date) => {
-    const obj = {
-      seconds: d.getSeconds(),
-      nanoseconds: d.getMilliseconds() * 1000000,
-    }
-    return obj
-  }
-
   let formatedData: RevisitFStore = {
     address: talk.address,
-    last_date: getTimestampObj(talk.date),
+    last_date: talk.date.getTime(),
     location: {
       latitude: talk.marker.latitude,
       longitude: talk.marker.longitude,
@@ -27,7 +19,7 @@ export const dataToFB = (
     stage: 0,
     visits: [
       {
-        date: getTimestampObj(talk.date),
+        date: talk.date.getTime(),
         notes: talk.notes,
       },
     ],

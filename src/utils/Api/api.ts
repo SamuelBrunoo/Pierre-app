@@ -108,7 +108,7 @@ const getUserInfo = async (userId: string): Promise<UserInfoRes> => {
     const data = {
       ...(user.data() as FSUser),
       id: userId,
-      dayRevisits: revisits,
+      revisits,
       logged: true,
     }
 

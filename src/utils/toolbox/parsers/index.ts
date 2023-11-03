@@ -1,7 +1,5 @@
-import { padValue } from './padValue'
-import { utcToLocalTime } from './UTCtoLocalTime'
-
-export default {
-  padValue,
-  utcToLocalTime
-}
+export { parseDate } from './date'
+export { padValue } from './padValue'
+export { utcToLocalTime } from './UTCtoLocalTime'
+import * as dateParser from './date'
+export { dateParser }

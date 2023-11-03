@@ -11,35 +11,13 @@ import Api from '../../utils/Api'
 import { RefreshControl } from 'react-native'
 import { padValue } from '../../utils/toolbox/parsers/padValue'
 import { ActivityType } from '../../utils/types/_ministery/activity'
-
-const revisits = [
-  {
-    personName: 'Jurema da Silva',
-    location: 'Canudos',
-    lastVisitDate: '23/08/2023',
-    id: 1,
-  },
-  {
-    personName: 'Fulaneide',
-    location: 'Vila Doze',
-    lastVisitDate: '22/08/2023',
-    id: 2,
-  },
-  {
-    personName: 'Barcileide',
-    location: 'Rio Farias',
-    lastVisitDate: '22/08/2023',
-    id: 3,
-  },
-  {
-    personName: 'Cleitu',
-    location: 'Coca-Cola',
-    lastVisitDate: '19/08/2023',
-    id: 4,
-  },
-]
+import { getDateString } from '../../utils/toolbox/parsers/date'
+import { useNavigation } from '@react-navigation/native'
+import { getStorageData } from '../../store/mmkv'
 
 const HomeScreen = () => {
+  const navigation = useNavigation<any>()
+
   const [user, setUserInfo] = useMMKVObject<LocalUserInfo>('user')
 
   const [modal, setModal] = useState({ showing: false, type: '' })
@@ -49,9 +27,7 @@ const HomeScreen = () => {
     setIsRefreshing(true)
     if (user) {
       await Api.getUserInfo(user.id).then(res => {
-        if (res.ok) {
-          setUserInfo({ logged: true, ...res.info })
-        }
+        if (res.ok) setUserInfo({ logged: true, ...res.info })
       })
     }
     setIsRefreshing(false)
@@ -59,17 +35,12 @@ const HomeScreen = () => {
 
   const renderSchedule = () => {
     const today = new Date()
-    const dateString =
-      `${today.getFullYear()}-` +
-      `${today.getMonth() + 1}-` +
-      `${today.getDate()}`
+    const dateString = getDateString(today, 'usa')
 
     let actEls: ActivityType[] = []
 
-    user?.schedule.weekly[(today.getDay() as 0, 1, 2, 3, 4, 5, 6)].forEach(
-      a => {
-        actEls.push(a)
-      },
+    user?.schedule.weekly[(today.getDay() as 0, 1, 2, 3, 4, 5, 6)].forEach(a =>
+      actEls.push(a),
     )
 
     user?.schedule.puntuals.forEach(p => {
@@ -79,10 +50,13 @@ const HomeScreen = () => {
     return actEls.map((a, k) => <HomeAgendaItem key={k} event={a} />)
   }
 
+  const goTo = (route: string) => {
+    navigation.navigate('Main', { screen: route })
+  }
+
   useEffect(() => {
-    // Api.updateT(user?.publisher_id as string)
-    // if (user) console.log(user)
-  }, [user])
+    getStorageData()
+  }, [])
 
   return (
     <S.Page
@@ -98,6 +72,7 @@ const HomeScreen = () => {
       <ModalComponent
         visible={modal.showing}
         setModal={setModal}
+        afterClose={refreshInfo}
         type={'newTalk'}
       />
       <S.Container>
@@ -109,7 +84,15 @@ const HomeScreen = () => {
         </S.PageHead>
 
         <S.TodayAgenda>
-          <S.AgendaTitle>Programação (5)</S.AgendaTitle>
+          <S.AgendaTitle>
+            Programação (
+            {
+              user?.schedule.weekly[
+                (new Date().getDay() as 0, 1, 2, 3, 4, 5, 6)
+              ].length
+            }
+            )
+          </S.AgendaTitle>
           <S.AgendaList
             nestedScrollEnabled={true}
             contentContainerStyle={{
@@ -149,7 +132,7 @@ const HomeScreen = () => {
         <S.InfoResume>
           <S.TopBlock>
             <S.InfoTitle>Relatório atual</S.InfoTitle>
-            <S.Seemore activeOpacity={1}>
+            <S.Seemore activeOpacity={1} onPress={() => goTo('Reports')}>
               <S.SeeMoreText>Ver mais</S.SeeMoreText>
               <icons.ArrowThick />
             </S.Seemore>
@@ -195,7 +178,7 @@ const HomeScreen = () => {
         <S.InfoResume>
           <S.TopBlock>
             <S.InfoTitle>Revisitas</S.InfoTitle>
-            <S.Seemore activeOpacity={1}>
+            <S.Seemore activeOpacity={1} onPress={() => goTo('Talks')}>
               <S.SeeMoreText>Ver mais</S.SeeMoreText>
               <icons.ArrowThick />
             </S.Seemore>
@@ -203,7 +186,7 @@ const HomeScreen = () => {
           <S.RevisitsList
             nestedScrollEnabled={true}
             contentContainerStyle={{ rowGap: 10 }}>
-            {(user?.dayRevisits ?? []).map((r, k) => (
+            {(user?.revisits ?? []).map((r, k) => (
               <HomeRevisitItem key={k} info={r} />
             ))}
           </S.RevisitsList>

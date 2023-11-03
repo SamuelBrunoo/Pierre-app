@@ -1,106 +1,86 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import * as S from './styles'
 import useStore from '../../store'
-import HomeAgendaItem from '../../components/HomeAgendaItem'
-
-import { icons } from '../../utils/imports'
-import HomeRevisitItem from '../../components/HomeRevisitItem'
 import { ArrowThin } from '../../utils/imports/icons'
 import TalkItem from '../../components/TalkItem'
 
-
-const events = [
-  {
-    name: 'Carrinho com Beltrana',
-    time: '14:00 - 16:00',
-    done: true,
-  },
-  {
-    name: 'Estudo',
-    time: '18:00 - 19:00',
-    done: true,
-    studentName: 'Marcinha'
-  },
-  {
-    name: 'Carrinho com Beltrana',
-    time: '14:00 - 16:00',
-    done: true,
-  },
-  {
-    name: 'Carrinho com Beltrana',
-    time: '14:00 - 16:00',
-    done: true,
-  },
-]
-
-const revisits = [
-  {
-    personName: 'Jurema da Silva',
-    location: 'Canudos',
-    lastVisitDate: '23/08/2023',
-    id: 1,
-  },
-  {
-    personName: 'Fulaneide',
-    location: 'Vila Doze',
-    lastVisitDate: '22/08/2023',
-    id: 2,
-  },
-  {
-    personName: 'Barcileide',
-    location: 'Rio Farias',
-    lastVisitDate: '22/08/2023',
-    id: 3,
-  },
-  {
-    personName: 'Cleitu',
-    location: 'Coca-Cola',
-    lastVisitDate: '19/08/2023',
-    id: 4,
-  },
-]
-
-
-
 const TalksScreen = () => {
-
   const user = useStore(store => store.user)
+  const [showingCat, setShowingCat] = useState<1 | 2 | 3>(2)
+  const [list, setList] = useState<any[]>([])
+
+  const [regDdShow, setRegDdShow] = useState(false)
+  const [ordDdShow, setOrdDdShow] = useState(false)
+
+  useEffect(() => {
+    const filtered = user?.revisits.filter(r => r.stage === showingCat) ?? []
+    setList(filtered)
+  }, [showingCat])
 
   return (
     <S.Page
       contentContainerStyle={{
         justifyContent: 'flex-start',
         flex: 1,
-      }}
-    >
+      }}>
       <S.Container>
         <S.CategoriesTabs>
-          <S.Category activeOpacity={1} active={false}>
+          <S.Category
+            activeOpacity={1}
+            active={showingCat === 1}
+            onPress={() => setShowingCat(1)}>
             <S.CatName>1ª conversa</S.CatName>
           </S.Category>
-          <S.Category activeOpacity={1} active={true}>
+          <S.Category
+            activeOpacity={1}
+            active={showingCat === 2}
+            onPress={() => setShowingCat(2)}>
             <S.CatName>Revisita</S.CatName>
           </S.Category>
-          <S.Category activeOpacity={1} active={false}>
+          <S.Category
+            activeOpacity={1}
+            active={showingCat === 3}
+            onPress={() => setShowingCat(3)}>
             <S.CatName>Estudo</S.CatName>
           </S.Category>
         </S.CategoriesTabs>
         <S.Filters>
           <S.DropdownArea>
-            <S.DropTop activeOpacity={1}>
+            <S.DropTop
+              activeOpacity={1}
+              onPress={() => setRegDdShow(!regDdShow)}>
               <S.DropName>Região</S.DropName>
               <ArrowThin />
-              <S.Dropdown></S.Dropdown>
             </S.DropTop>
             <S.Selected>Antônio Carlos</S.Selected>
+            <S.Dropdown visible={regDdShow}>
+              <S.DropDownContent>
+                {user?.territories.map((t, k) => (
+                  <S.DropDownItem key={k}>
+                    <S.DDIText>{t.name}</S.DDIText>
+                  </S.DropDownItem>
+                ))}
+              </S.DropDownContent>
+            </S.Dropdown>
           </S.DropdownArea>
           <S.DropdownArea>
-            <S.DropTop activeOpacity={1}>
+            <S.DropTop
+            activeOpacity={.8}
+            onPress={()=>setOrdDdShow(!ordDdShow)}
+            >
               <S.DropName>Ordernar por</S.DropName>
               <ArrowThin />
-              <S.Dropdown></S.Dropdown>
             </S.DropTop>
             <S.Selected>Mais recente</S.Selected>
+            <S.Dropdown visible={ordDdShow} right={true}>
+              <S.DropDownContent>
+                {user?.territories.map((t, k) => (
+                  <S.DropDownItem key={k}>
+                    <S.DDIText>{t.name}</S.DDIText>
+                  </S.DropDownItem>
+                ))}
+              </S.DropDownContent>
+            </S.Dropdown>
           </S.DropdownArea>
         </S.Filters>
       </S.Container>
@@ -109,25 +89,12 @@ const TalksScreen = () => {
           rowGap: 12,
           paddingTop: 10,
         }}>
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
-        <TalkItem />
+        {list.map((item, k) => (
+          <TalkItem key={k} talk={item} />
+        ))}
       </S.TalksList>
     </S.Page>
   )
-
 }
-
 
 export default TalksScreen

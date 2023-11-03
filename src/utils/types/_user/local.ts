@@ -6,5 +6,5 @@ import { FSUser } from './firestore'
 export interface LocalUserInfo extends FSUser {
   logged: boolean
   id: string
-  dayRevisits: RevisitFStore[]
+  revisits: RevisitFStore[]
 }

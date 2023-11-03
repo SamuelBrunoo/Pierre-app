@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
 import * as S from './styles'
-import Input from '../../components/Input'
+
+import { FieldsErrors } from '../../utils/types/loginForm'
+import { LocalUserInfo } from '../../utils/types/_user/local'
+
 import { useNavigation } from '@react-navigation/native'
 import Api from '../../utils/Api'
-import { Alert } from 'react-native'
-import { FieldsErrors } from '../../utils/types/loginForm'
 import useStore from '../../store'
-import { LocalUserInfo } from '../../utils/types/_user/local'
-import { useMMKVObject } from 'react-native-mmkv'
+
+import { Alert } from 'react-native'
+import Input from '../../components/Input'
 
 const LoginScreen = () => {
   const navigation = useNavigation<any>()
   const User = useStore(state => state.User)
-  const [, setLocalUser] = useMMKVObject<LocalUserInfo>('user')
 
-  const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
+  const [email, setEmail] = useState('samuelmc983@gmail.com')
+  const [pass, setPass] = useState('12345678')
   const [errors, setErrors] = useState<FieldsErrors>({
     email: { has: false, message: '' },
     password: { has: false, message: '' },
@@ -32,7 +33,7 @@ const LoginScreen = () => {
             logged: true,
             ...userInfo.info,
           })
-          navigation.navigate('Main', { screen: 'Home' })
+          navigation.reset('Main', { screen: 'Home' })
         } else {
           Alert.alert('Houve um erro, tente novamente depois')
         }
@@ -63,7 +64,6 @@ const LoginScreen = () => {
 
   const saveInfoInLocal = (userInfo: LocalUserInfo) => {
     User.storeInfo(userInfo)
-    setLocalUser(userInfo)
   }
 
   return (

@@ -11,6 +11,6 @@ export type UserInfoRes =
     }
 
 export interface Info extends FSUser {
-  dayRevisits: RevisitFStore[]
+  revisits: RevisitFStore[]
   id: string
 }

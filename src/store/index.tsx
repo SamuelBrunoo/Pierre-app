@@ -1,18 +1,11 @@
-import { create } from "zustand"
+import { create } from 'zustand'
 
-import useReducers from "./reducers"
-import { StoreInterface } from "../utils/types/store"
-
+import useReducers from './reducers'
+import { StoreInterface } from '../utils/types/store'
 
 const useStore = create<StoreInterface>(set => ({
-  user: {
-    logged: false,
-    name: "",
-    email: "",
-    id: ""
-  },
+  user: null,
   ...useReducers(set),
 }))
-
 
 export default useStore
