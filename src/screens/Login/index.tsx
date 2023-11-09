@@ -10,9 +10,10 @@ import useStore from '../../store'
 
 import { Alert } from 'react-native'
 import Input from '../../components/Input'
+import { AppNavProps } from '../../navigators/App'
 
 const LoginScreen = () => {
-  const navigation = useNavigation<any>()
+  const navigation = useNavigation<AppNavProps>()
   const User = useStore(state => state.User)
 
   const [email, setEmail] = useState('samuelmc983@gmail.com')
@@ -33,7 +34,10 @@ const LoginScreen = () => {
             logged: true,
             ...userInfo.info,
           })
-          navigation.reset('Main', { screen: 'Home' })
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Main', path: 'Home' }],
+          })
         } else {
           Alert.alert('Houve um erro, tente novamente depois')
         }

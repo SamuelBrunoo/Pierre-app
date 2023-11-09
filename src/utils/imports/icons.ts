@@ -3,6 +3,9 @@ import ReportsIcon from '../../assets/icons/reports.svg'
 import ScheduleIcon from '../../assets/icons/schedule.svg'
 import TalksIcon from '../../assets/icons/talks.svg'
 
+import SettingsIcon from '../../assets/icons/settings.svg'
+import SignOutIcon from '../../assets/icons/signout.svg'
+
 import ArrowThick from '../../assets/icons/arrow_thick.svg'
 import ArrowThin from '../../assets/icons/arrow_thin.svg'
 import CalendarIcon from '../../assets/icons/calendar.svg'
@@ -22,6 +25,9 @@ export {
   ReportsIcon,
   ScheduleIcon,
   TalksIcon,
+
+  SettingsIcon,
+  SignOutIcon,
 
   ArrowThick,
   ArrowThin,

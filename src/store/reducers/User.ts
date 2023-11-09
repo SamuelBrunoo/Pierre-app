@@ -1,6 +1,11 @@
 import { Setter } from '../../utils/types/store'
 import { LocalUserInfo } from '../../utils/types/_user/local'
-import { storage, getStorageData, setStorageData } from '../mmkv'
+import {
+  storage,
+  getStorageData,
+  setStorageData,
+  clearAllStorageData,
+} from '../mmkv'
 
 export default (set: Setter) => {
   return {
@@ -12,8 +17,12 @@ export default (set: Setter) => {
         user: userInfo,
       }))
     },
-    hi: () => {
-      console.log('Hi')
+    signout: () => {
+      clearAllStorageData()
+      return set(state => ({
+        ...state,
+        user: null,
+      }))
     },
   }
 }

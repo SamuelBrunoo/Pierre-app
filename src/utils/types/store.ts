@@ -4,7 +4,7 @@ export interface StoreInterface {
   user: null | LocalUserInfo
   User: {
     storeInfo: (userInfo: LocalUserInfo) => void
-    hi:()=>void
+    signout: () => void
   }
 }
 

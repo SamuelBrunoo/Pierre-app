@@ -22,8 +22,6 @@ const getStorageData = (key?: string) => {
     }
   }
 
-  console.log("datakjghlkj", data)
-
   return data
 }
 
@@ -38,4 +36,8 @@ const setStorageData = (key: string, value: string | object) => {
   }
 }
 
-export { storage, getStorageData, setStorageData }
+const clearAllStorageData = () => {
+  storage.clearAll()
+}
+
+export { storage, getStorageData, setStorageData, clearAllStorageData }
