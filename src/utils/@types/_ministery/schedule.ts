@@ -1,6 +1,6 @@
 import { ActivityType } from './activity'
 
-export type UserSchedule = {
+export type TUserSchedule = {
   puntuals: Puntuals
   weekly: {
     '0': ActivityType[]

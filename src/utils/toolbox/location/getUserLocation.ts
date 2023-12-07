@@ -4,7 +4,7 @@ import {
   PermissionsAndroid,
 } from 'react-native'
 import Geolocation from 'react-native-geolocation-service'
-import { UserLocation } from '../../types/maps'
+import { UserLocation } from '../../@types/maps'
 
 
 const getPermission = async () => {

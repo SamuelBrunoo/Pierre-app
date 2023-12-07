@@ -1,14 +1,14 @@
 import { Alert } from 'react-native'
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
-import { LoginRes } from '../types/Api/login'
+import { LoginRes } from '../@types/Api/login'
 import { verifySignInError } from './auxiliars'
-import { GetAddressRes } from '../types/Api/mapAdress'
-import { SaveTalkProps, SaveTalkRes } from '../types/Api/saveTalk'
-import { Coordenates } from '../types/maps'
-import { UserInfoRes } from '../types/Api/getUserInfo'
-import { DayRevisit, RevisitFStore } from '../types/_ministery/revisit'
-import { FSUser } from '../types/_user/firestore'
+import { GetAddressRes } from '../@types/Api/mapAdress'
+import { SaveTalkProps, SaveTalkRes } from '../@types/Api/saveTalk'
+import { Coordenates } from '../@types/maps'
+import { UserInfoRes } from '../@types/Api/getUserInfo'
+import { DayRevisit, TRevisitFStore } from '../@types/_ministery/revisit'
+import { FSUser } from '../@types/_user/firestore'
 import { dataToFB } from '../toolbox/parsers/dataToFB'
 
 const baseMapsUrl = 'https://maps.googleapis.com/maps/api/geocode/json'
@@ -88,7 +88,7 @@ const getUserInfo = async (userId: string): Promise<UserInfoRes> => {
   }
 
   const user = await firestore().collection('users').doc(userId).get()
-  let revisits: RevisitFStore[] = []
+  let revisits: TRevisitFStore[] = []
 
   await firestore()
     .collection('talks')
@@ -97,7 +97,7 @@ const getUserInfo = async (userId: string): Promise<UserInfoRes> => {
     .then(res =>
       res.docs.forEach(r => {
         const data = {
-          ...(r.data() as RevisitFStore),
+          ...(r.data() as TRevisitFStore),
           id: r.id,
         }
         revisits.push(data)
@@ -244,15 +244,19 @@ const saveTalk = async (
     ok: true,
   }
 
-  await firestore()
-    .collection('talks')
-    .add(dataToFB(userId, talk))
-    .catch(() => {
-      result = {
-        ok: false,
-        error: 'Oops.. Falha ao atualizar. Tente novamente mais tarde.',
-      }
-    })
+  const d = dataToFB(userId, talk)
+
+  try {
+    await firestore()
+      .collection('talks')
+      .add(d)
+      .catch(() => {
+        result = {
+          ok: false,
+          error: 'Oops.. Falha ao atualizar. Tente novamente mais tarde.',
+        }
+      })
+  } catch (error) {}
 
   return result
 }

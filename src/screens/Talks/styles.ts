@@ -2,13 +2,17 @@ import { ImageBackground } from 'react-native'
 import Animated from 'react-native-reanimated'
 import styled from 'styled-components/native'
 
-export const Page = styled.ScrollView``
+export const Page = styled.ScrollView`
+  flex: 1;
+  background-color: red;
+`
 
 export const Container = styled.View`
   row-gap: 10px;
   padding-right: 24px;
   padding-left: 24px;
   justify-content: flex-start;
+  background-color: blue;
   row-gap: 20px;
 `
 
@@ -52,7 +56,7 @@ export const Dropdown = styled.View<{ visible: boolean; right?: boolean }>`
   position: absolute;
   display: ${({ visible }) => (visible ? 'flex' : 'none')};
   width: 150%;
-  height: 140px;
+  /* height: 140px; */
   background-color: rgba(50, 50, 50, 1);
   top: 38px;
   ${({right}) => right ? 'right: 0px;' : ''}

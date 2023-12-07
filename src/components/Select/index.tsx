@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View, TextInput, Animated } from 'react-native'
-import { FieldError } from '../../utils/types/loginForm'
+import { FieldError } from '../../utils/@types/loginForm'
 import * as S from './styles'
 import { ArrowThin } from '../../utils/imports/icons'
-import { Territory } from '../../utils/types/_ministery/territory'
+import { TTerritory } from '../../utils/@types/_ministery/territory'
 
 type Person = {
   id: string
@@ -11,10 +11,10 @@ type Person = {
 }
 
 type Props = {
-  options: Person[] | Territory[]
+  options: Person[] | TTerritory[]
   placeholder: string
-  value: Person | Territory
-  onChange: (v: Person | Territory) => void
+  value: Person | TTerritory
+  onChange: (v: Person | TTerritory) => void
   error: FieldError
 }
 
@@ -28,7 +28,7 @@ const Select = ({
   const errOpacity = useRef(new Animated.Value(0)).current
 
   const [showingOpt, setShowingOpt] = useState(false)
-  const [choosed, setChoosed] = useState<Person | Territory | null>(value)
+  const [choosed, setChoosed] = useState<Person | TTerritory | null>(value)
 
   useEffect(() => {
     if (error.has) {
@@ -50,7 +50,7 @@ const Select = ({
 
   const handleChoose = (p: any) => {
     setChoosed(p)
-    onChange(options.find(o => o.id === choosed?.id) as Person | Territory)
+    onChange(options.find(o => o.id === choosed?.id) as Person | TTerritory)
     setShowingOpt(false)
   }
 

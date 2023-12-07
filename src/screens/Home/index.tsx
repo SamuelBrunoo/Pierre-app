@@ -5,20 +5,24 @@ import HomeAgendaItem from '../../components/HomeAgendaItem'
 import { icons } from '../../utils/imports'
 import HomeRevisitItem from '../../components/HomeRevisitItem'
 import { useMMKVObject } from 'react-native-mmkv'
-import { LocalUserInfo } from '../../utils/types/_user/local'
+import { LocalUserInfo } from '../../utils/@types/_user/local'
 import ModalComponent from '../../components/Modal'
 import Api from '../../utils/Api'
 import { RefreshControl } from 'react-native'
 import { padValue } from '../../utils/toolbox/parsers/padValue'
-import { ActivityType } from '../../utils/types/_ministery/activity'
+import { ActivityType } from '../../utils/@types/_ministery/activity'
 import { getDateString } from '../../utils/toolbox/parsers/date'
 import { useNavigation } from '@react-navigation/native'
 import { getStorageData } from '../../store/mmkv'
+import { TRevisitFStore } from '../../utils/@types/_ministery/revisit'
+import { TabsProps } from '../../navigators/Main'
+import useStore from '../../store'
 
 const HomeScreen = () => {
-  const navigation = useNavigation<any>()
+  const navigation = useNavigation<TabsProps>()
 
-  const [user, setUserInfo] = useMMKVObject<LocalUserInfo>('user')
+  const { user, User } = useStore(state => state)
+  const [_, setUserInfo] = useMMKVObject<LocalUserInfo>('user')
 
   const [modal, setModal] = useState({ showing: false, type: '' })
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -27,7 +31,10 @@ const HomeScreen = () => {
     setIsRefreshing(true)
     if (user) {
       await Api.getUserInfo(user.id).then(res => {
-        if (res.ok) setUserInfo({ logged: true, ...res.info })
+        if (res.ok) {
+          User.storeInfo({ logged: true, ...res.info })
+          setUserInfo({ logged: true, ...res.info })
+        }
       })
     }
     setIsRefreshing(false)
@@ -51,7 +58,15 @@ const HomeScreen = () => {
   }
 
   const goTo = (route: string) => {
+    // @ts-ignore
     navigation.navigate('Main', { screen: route })
+  }
+
+  const openRevisit = (revisit: TRevisitFStore) => {
+    navigation.navigate('Talks', {
+      single: true,
+      data: revisit,
+    })
   }
 
   useEffect(() => {
@@ -187,7 +202,7 @@ const HomeScreen = () => {
             nestedScrollEnabled={true}
             contentContainerStyle={{ rowGap: 10 }}>
             {(user?.revisits ?? []).map((r, k) => (
-              <HomeRevisitItem key={k} info={r} />
+              <HomeRevisitItem key={k} info={r} openRevisit={openRevisit} />
             ))}
           </S.RevisitsList>
         </S.InfoResume>

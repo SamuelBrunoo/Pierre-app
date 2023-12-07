@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import * as S from './styles'
 
-import { FieldsErrors } from '../../utils/types/loginForm'
-import { LocalUserInfo } from '../../utils/types/_user/local'
+import { FieldsErrors } from '../../utils/@types/loginForm'
+import { LocalUserInfo } from '../../utils/@types/_user/local'
 
 import { useNavigation } from '@react-navigation/native'
 import Api from '../../utils/Api'

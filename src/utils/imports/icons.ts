@@ -8,6 +8,7 @@ import SignOutIcon from '../../assets/icons/signout.svg'
 
 import ArrowThick from '../../assets/icons/arrow_thick.svg'
 import ArrowThin from '../../assets/icons/arrow_thin.svg'
+import BackIcon from '../../assets/icons/back.svg'
 import CalendarIcon from '../../assets/icons/calendar.svg'
 import CheckIcon from '../../assets/icons/check.svg'
 import CheckLightIcon from '../../assets/icons/check_white.svg'
@@ -31,6 +32,7 @@ export {
 
   ArrowThick,
   ArrowThin,
+  BackIcon,
   CalendarIcon,
   CheckIcon,
   CheckLightIcon,

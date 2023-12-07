@@ -1,4 +1,4 @@
-import { Modality } from '../types/Modalities'
+import { Modality } from '../@types/Modalities'
 
 const MODALITIES: Modality[] = [
   { id: 1, name: 'Campo' },

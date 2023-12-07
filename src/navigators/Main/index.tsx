@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import {
   createBottomTabNavigator,
   BottomTabNavigationOptions,
+  BottomTabNavigationProp,
 } from '@react-navigation/bottom-tabs'
 import mainScreensHeaderProps from './mainScreensHeaderProps'
 import {
-  DrawerContent,
   DrawerContentComponentProps,
   DrawerContentScrollView,
   DrawerItem,
@@ -25,14 +25,31 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native'
-import { SettingsIcon, SignOutIcon } from '../../utils/imports/icons'
+import { BackIcon, SettingsIcon, SignOutIcon } from '../../utils/imports/icons'
 import useStore from '../../store'
 import { useNavigation } from '@react-navigation/native'
 import { AppNavProps, AppRoutes } from '../App'
+import { TRevisitFStore } from '../../utils/@types/_ministery/revisit'
+import TalkView from '../../screens/subscreens/TalkView'
+import LeftBack from '../../components/Header/LeftBack'
 
-const Tab = createBottomTabNavigator()
+export type TabsRoutes = {
+  Home: undefined
+  Talks: {
+    single?: boolean
+    data?: TRevisitFStore
+  }
+  TalkView: {
+    rev: TRevisitFStore
+  }
+  Reports: undefined
+  Schedule: undefined
+}
+
+export type TabsProps = BottomTabNavigationProp<TabsRoutes>
+
+const Tab = createBottomTabNavigator<TabsRoutes>()
 const Drawer = createDrawerNavigator()
 
 const CustomDrawer = (props: DrawerContentComponentProps) => {

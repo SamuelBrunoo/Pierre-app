@@ -5,7 +5,7 @@ import {
   Animated,
 } from 'react-native'
 import s from './styles'
-import { FieldError } from '../../utils/types/loginForm';
+import { FieldError } from '../../utils/@types/loginForm';
 import styles from './styles';
 
 

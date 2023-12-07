@@ -1,5 +1,5 @@
-import { Setter } from '../../utils/types/store'
-import { LocalUserInfo } from '../../utils/types/_user/local'
+import { Setter } from '../../utils/@types/store'
+import { LocalUserInfo } from '../../utils/@types/_user/local'
 import {
   storage,
   getStorageData,

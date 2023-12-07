@@ -1,4 +1,4 @@
-import { Setter } from '../../utils/types/store'
+import { Setter } from '../../utils/@types/store'
 import UserReducer from './User'
 
 const useReducers = (set: Setter) => {

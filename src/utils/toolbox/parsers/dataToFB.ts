@@ -1,11 +1,11 @@
-import { SaveTalkProps } from '../../types/Api/saveTalk'
-import { RevisitFStore } from '../../types/_ministery/revisit'
+import { SaveTalkProps } from '../../@types/Api/saveTalk'
+import { TRevisitFStore } from '../../@types/_ministery/revisit'
 
 export const dataToFB = (
   userId: string,
   talk: SaveTalkProps,
-): RevisitFStore => {
-  let formatedData: RevisitFStore = {
+): TRevisitFStore => {
+  let formatedData: TRevisitFStore = {
     address: talk.address,
     last_date: talk.date.getTime(),
     location: {

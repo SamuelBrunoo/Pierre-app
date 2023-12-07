@@ -1,4 +1,4 @@
-export type Territory = {
+export type TTerritory = {
   id: string
   name: string
 }

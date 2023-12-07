@@ -2,7 +2,7 @@ import React from 'react'
 import * as S from './styles'
 import { LocationIcon } from '../../utils/imports/icons'
 import { Image } from 'react-native'
-import { AdressInfo } from '../../utils/types/Api/mapAdress'
+import { AdressInfo } from '../../utils/@types/Api/mapAdress'
 
 
 type Props = {

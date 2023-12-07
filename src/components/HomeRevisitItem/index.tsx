@@ -1,13 +1,17 @@
 import React from 'react'
-import { HomeRevisitItemProps } from '../../utils/types/components/HomeRevisitItem'
+import { HomeRevisitItemProps } from '../../utils/@types/components/HomeRevisitItem'
 import * as S from './styles'
 import { ExpandIcon } from '../../utils/imports/icons'
 import { parseDate } from '../../utils/toolbox/parsers'
 
-const HomeRevisitItem = ({ info }: HomeRevisitItemProps) => {
+const HomeRevisitItem = ({ info, openRevisit }: HomeRevisitItemProps) => {
+  
+  const handlePress = ()=>{
+    openRevisit(info)
+  }
   
   return (
-    <S.El activeOpacity={0.7}>
+    <S.El activeOpacity={0.7} onPress={handlePress}>
       <S.Left>
         <S.PersonName>{info.person_name ?? '-'}</S.PersonName>
         <S.SmallerInfo>{info.neighborhood ?? '-'}</S.SmallerInfo>

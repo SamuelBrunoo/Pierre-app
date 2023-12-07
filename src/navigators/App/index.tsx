@@ -20,7 +20,7 @@ export type AppNavProps = NativeStackNavigationProp<AppNavRoutes>
 const Stack = createNativeStackNavigator<AppNavRoutes>()
 
 const AppNavigator = () => {
-  const localUser = useStore(store => store.user)
+  const { user: localUser, User } = useStore(store => store)
 
   const [renderInfo, setRenderInfo] = useState({
     isLogged: false,
@@ -31,6 +31,7 @@ const AppNavigator = () => {
     if (localUser?.logged) setRenderInfo({ isLogged: true, canRender: true })
     else {
       const pData = getStorageData('user')
+      User.storeInfo(pData)
 
       if (pData.logged) setRenderInfo({ isLogged: true, canRender: true })
       else setRenderInfo({ isLogged: false, canRender: true })

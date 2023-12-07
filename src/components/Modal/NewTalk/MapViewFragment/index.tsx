@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import * as S from '../styles'
 import MapView, { LongPressEvent, Marker } from 'react-native-maps'
-import { Coordenates, CustomMarker } from '../../../../utils/types/maps'
+import { Coordenates, CustomMarker } from '../../../../utils/@types/maps'
 
 
 type Props = {

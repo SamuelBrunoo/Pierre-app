@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as S from './styles'
 import NetInfo from '@react-native-community/netinfo'
 import Input from '../../Input'
-import { FieldsErrors } from '../../../utils/types/forms/newTalk'
+import { FieldsErrors } from '../../../utils/@types/forms/newTalk'
 import Select from '../../Select'
 import {
   CalendarIcon,
@@ -14,14 +14,14 @@ import { Alert, Text, View } from 'react-native'
 import MapArea from '../../MapArea'
 import MapView, { LongPressEvent } from 'react-native-maps'
 import Api from '../../../utils/Api'
-import { AdressInfo } from '../../../utils/types/Api/mapAdress'
+import { AdressInfo } from '../../../utils/@types/Api/mapAdress'
 import { getUserLocation } from '../../../utils/toolbox/location/getUserLocation'
-import { Coordenates, CustomMarker } from '../../../utils/types/maps'
+import { Coordenates, CustomMarker } from '../../../utils/@types/maps'
 import Button from '../../Button'
 import MapViewFragment from './MapViewFragment'
 import { useMMKV, useMMKVObject } from 'react-native-mmkv'
-import { LocalUserInfo } from '../../../utils/types/_user/local'
-import { Territory } from '../../../utils/types/_ministery/territory'
+import { LocalUserInfo } from '../../../utils/@types/_user/local'
+import { TTerritory } from '../../../utils/@types/_ministery/territory'
 
 type Props = {
   handleClose: () => void
@@ -333,7 +333,7 @@ const NewTalk = ({ handleClose }: Props) => {
                         value={
                           user?.territories.find(
                             t => t.id === neighborhood.id,
-                          ) as Territory
+                          ) as TTerritory
                         }
                         onChange={v => setName(v.name)}
                         placeholder="Nome da pessoa"
@@ -350,11 +350,11 @@ const NewTalk = ({ handleClose }: Props) => {
                       />
                       {/* if has territories */}
                       <Select
-                        options={user?.territories as Territory[]}
+                        options={user?.territories as TTerritory[]}
                         value={
                           user?.territories.find(
                             t => t.id === neighborhood.id,
-                          ) as Territory
+                          ) as TTerritory
                         }
                         onChange={t => setNeighborhood(t)}
                         placeholder="Território"
@@ -363,6 +363,17 @@ const NewTalk = ({ handleClose }: Props) => {
                       {/* else show input disabled: 'Nenhum território cadastrado' */}
                     </>
                   )}
+                  {/* Observations */}
+                  {/* <S.InputWrapper>
+                    <Input
+                      type="none"
+                      textarea={true}
+                      error={errors.notes}
+                      onChange={setNotes}
+                      placeholder="Anotação"
+                      value={notes}
+                    />
+                  </S.InputWrapper> */}
                   <S.InputWrapper>
                     <Input
                       type="none"

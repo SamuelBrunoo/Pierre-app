@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { FieldError } from "../../utils/types/forms/newTalk"
+import { FieldError } from "../../utils/@types/forms/newTalk"
 import { StyleSheet } from 'react-native'
 
 export const { shadowStyle } = StyleSheet.create({

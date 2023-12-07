@@ -7,7 +7,7 @@ export type DayRevisit = {
   id: string
 }
 
-export type RevisitFStore = {
+export type TRevisitFStore = {
   address: string
   last_date: number
   location: Coordenates
@@ -16,5 +16,10 @@ export type RevisitFStore = {
   person_name: string
   publisher_id: string
   stage: number
-  visits: any[]
+  visits: TFSVisit[]
+}
+
+export type TFSVisit = {
+  date: number
+  notes: string
 }

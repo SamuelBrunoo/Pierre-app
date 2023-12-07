@@ -1,5 +1,5 @@
-import { UserSchedule } from '../_ministery/schedule'
-import { Territory } from '../_ministery/territory'
+import { TUserSchedule } from '../_ministery/schedule'
+import { TTerritory } from '../_ministery/territory'
 
 export type FSUser = {
   name: string
@@ -12,6 +12,6 @@ export type FSUser = {
     studies: number
     videos: number
   }
-  schedule: UserSchedule
-  territories: Territory[]
+  schedule: TUserSchedule
+  territories: TTerritory[]
 }

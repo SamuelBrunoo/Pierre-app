@@ -1,5 +1,5 @@
 import { Alert } from "react-native"
-import { CalendarType, CalendarWeek } from "../../utils/types/components/Calendar"
+import { CalendarType, CalendarWeek } from "../../utils/@types/components/Calendar"
 
 
 export const getCalData = (

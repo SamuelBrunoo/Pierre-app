@@ -1,4 +1,4 @@
-import { CalendarType } from "../../utils/types/components/Calendar";
+import { CalendarType } from "../../utils/@types/components/Calendar";
 
 export const falseCalendarData: CalendarType = {
   rows: [

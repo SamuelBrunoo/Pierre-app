@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as S from './styles'
-import { CalendarDay, CalendarType, CalendarWeek } from '../../utils/types/components/Calendar'
+import { CalendarDay, CalendarType, CalendarWeek } from '../../utils/@types/components/Calendar'
 import { falseCalendarData } from './falseCalendarData'
 import { Alert } from 'react-native'
 import { getCalData } from './getCalData'

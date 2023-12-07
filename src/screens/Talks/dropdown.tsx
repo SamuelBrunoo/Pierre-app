@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import Animated, { SlideInDown } from 'react-native-reanimated'
-import { BlurView } from '@react-native-community/blur'
 
 
 type Props = {

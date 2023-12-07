@@ -1,4 +1,4 @@
-import { DayRevisit, RevisitFStore } from '../_ministery/revisit'
+import { DayRevisit, TRevisitFStore } from '../_ministery/revisit'
 import { FSUser } from '../_user/firestore'
 
 export type UserInfoRes =
@@ -11,6 +11,6 @@ export type UserInfoRes =
     }
 
 export interface Info extends FSUser {
-  revisits: RevisitFStore[]
+  revisits: TRevisitFStore[]
   id: string
 }

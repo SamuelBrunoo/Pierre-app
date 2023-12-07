@@ -1,20 +1,16 @@
 import React from 'react'
 import * as S from './styles'
 import { LocationIcon } from '../../utils/imports/icons'
-import { RevisitFStore } from '../../utils/types/_ministery/revisit'
+import { TRevisitFStore } from '../../utils/@types/_ministery/revisit'
 import { dateParser } from '../../utils/toolbox/parsers'
 
 // TODO -> move to 'types/components'
 type Props = {
-  talk: RevisitFStore
-  // talk: {
-  //   person_name: string
-  //   lastDate: string | number
-  //   location: string
-  // }
+  talk: TRevisitFStore
+  onSelect: (rInfo: TRevisitFStore) => void
 }
 
-const TalkItem = ({ talk }: Props) => {
+const TalkItem = ({ talk, onSelect }: Props) => {
   return (
     <S.El
       activeOpacity={0.7}
@@ -22,7 +18,8 @@ const TalkItem = ({ talk }: Props) => {
         elevation: 5,
         shadowOpacity: 1,
         shadowColor: 'rgba(0, 0, 0, .7)',
-      }}>
+      }}
+      onPress={() => onSelect(talk)}>
       <S.Left>
         <S.PersonName>{talk.person_name}</S.PersonName>
         <S.LastDate>
