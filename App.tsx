@@ -1,22 +1,23 @@
 import React from 'react'
-import { StatusBar, useColorScheme } from 'react-native'
+import { StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 import AppNavigator from './src/navigators/App'
+import { ThemeProvider } from 'styled-components'
+import theme from './src/assets/styles/themes'
 
 function App() {
 
-  const isDarkMode = useColorScheme() === 'dark'
-
   return (
-    <NavigationContainer>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={isDarkMode ? Colors.darker : Colors.lighter}
-      />
-      <AppNavigator />
-    </NavigationContainer>
-  );
+    <ThemeProvider theme={theme}>
+      <NavigationContainer>
+        <StatusBar
+          barStyle={'dark-content'}
+          backgroundColor={theme.background.default}
+        />
+        <AppNavigator />
+      </NavigationContainer>
+    </ThemeProvider>
+  )
 }
 
 export default App

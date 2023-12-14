@@ -7,11 +7,13 @@ import SettingsIcon from '../../assets/icons/settings.svg'
 import SignOutIcon from '../../assets/icons/signout.svg'
 
 import ArrowThick from '../../assets/icons/arrow_thick.svg'
+import ArrowThickGrey from '../../assets/icons/arrow_thick_grey.svg'
 import ArrowThin from '../../assets/icons/arrow_thin.svg'
 import BackIcon from '../../assets/icons/back.svg'
 import CalendarIcon from '../../assets/icons/calendar.svg'
 import CheckIcon from '../../assets/icons/check.svg'
 import CheckLightIcon from '../../assets/icons/check_white.svg'
+import CheckOrangeIcon from '../../assets/icons/check_orange.svg'
 import ClockIcon from '../../assets/icons/clock.svg'
 import CloseIcon from '../../assets/icons/close.svg'
 import ExpandIcon from '../../assets/icons/expand.svg'
@@ -31,11 +33,13 @@ export {
   SignOutIcon,
 
   ArrowThick,
+  ArrowThickGrey,
   ArrowThin,
   BackIcon,
   CalendarIcon,
   CheckIcon,
   CheckLightIcon,
+  CheckOrangeIcon,
   ClockIcon,
   CloseIcon,
   ExpandIcon,

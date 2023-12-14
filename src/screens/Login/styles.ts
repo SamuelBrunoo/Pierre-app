@@ -1,7 +1,9 @@
 import styled from "styled-components/native"
 
 
-export const Page = styled.ScrollView``
+export const Page = styled.ScrollView`
+  background-color: ${({ theme }) => theme.background.default};
+`
 
 export const Content = styled.View`
   gap:132px;

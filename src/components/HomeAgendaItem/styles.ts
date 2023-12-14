@@ -1,38 +1,55 @@
-import styled from "styled-components/native"
-
+import styled from 'styled-components/native'
 
 export const El = styled.TouchableOpacity`
-  flex-direction:row;
-  align-items:center;
-  justify-content:space-between;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${({ theme }) => theme.background.cards};
+  padding: ${({ theme }) => theme.paddings.lineCard};
+  border-radius: 6px;
+  margin: 4px;
 `
 
 export const Info = styled.View``
 
-export const EventName = styled.Text<{ done: boolean; }>`
-  font-size:15px;
-  font-weight:500;
-  color:${({ done }) => done ? 'rgba(17,151,14,1)' : '#FFF'};
+export const EventName = styled.View`
+  flex-direction: row;
+`
+
+export const EventModality = styled.Text`
+  font-size: 15px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.blackPiano};
+`
+
+export const EventPartner = styled.Text`
+  font-size: 15px;
+  font-weight: 300;
+  color: ${({ theme }) => theme.colors.lightGrey};
 `
 
 export const EventTime = styled.Text`
-  font-size:12px;
-  font-weight:300;
+  font-size: 12px;
+  font-weight: 300;
+  color: ${({ theme }) => theme.colors.lightGrey};
 `
 
 export const StudentName = styled.Text`
-  font-size:12px;
-  font-weight:500;
-  color:#AFAFAF;
+  font-size: 12px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.orange};
 `
 
-export const Checkbox = styled.View<{ done: boolean; }>`
-  width:24px;
-  height:24px;
-  border:1px solid ${({ done }) => done ? 'rgba(17,151,14,1)' : '#6A6A6A'};
+export const Checkbox = styled.View<{ done: boolean }>`
+  width: 24px;
+  height: 24px;
+  border: 1px solid
+    ${p => (!p.done ? p.theme.colors.darkGrey : p.theme.colors.orange)};
   border-radius: 6px;
-  color:${({ done }) => done ? 'rgba(17,151,14,1)' : 'rgba(17,151,14,0)'};
+  color: ${({ done, theme }) =>
+    !done ? theme.colors.darkGrey : theme.colors.orange};
   justify-content: center;
   align-items: center;
-  fill:${({ done }) => done ? 'rgba(17,151,14,1)' : 'rgba(17,151,14,0)'};
+  fill: ${({ done, theme }) =>
+    !done ? theme.colors.darkGrey : theme.colors.orange};
 `

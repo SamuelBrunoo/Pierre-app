@@ -143,12 +143,6 @@ const HomeScreen = () => {
           </S.ScIconArea>
           <S.ScName numberOfLines={1}>Anotar conversa</S.ScName>
         </S.Shortcut>
-        <S.Shortcut>
-          <S.ScIconArea>
-            <icons.SendIcon />
-          </S.ScIconArea>
-          <S.ScName numberOfLines={1}>Enviar relatório</S.ScName>
-        </S.Shortcut>
       </S.Shortcuts>
       <S.Container>
         <S.InfoResume>
@@ -156,7 +150,7 @@ const HomeScreen = () => {
             <S.InfoTitle>Relatório atual</S.InfoTitle>
             <S.Seemore activeOpacity={1} onPress={() => goTo('Reports')}>
               <S.SeeMoreText>Ver mais</S.SeeMoreText>
-              <icons.ArrowThick />
+              <icons.ArrowThickGrey />
             </S.Seemore>
           </S.TopBlock>
           <S.ReportList>
@@ -202,7 +196,7 @@ const HomeScreen = () => {
             <S.InfoTitle>Revisitas</S.InfoTitle>
             <S.Seemore activeOpacity={1} onPress={() => goTo('Talks')}>
               <S.SeeMoreText>Ver mais</S.SeeMoreText>
-              <icons.ArrowThick />
+              <icons.ArrowThickGrey />
             </S.Seemore>
           </S.TopBlock>
           <S.RevisitsList
