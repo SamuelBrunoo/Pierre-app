@@ -4,9 +4,14 @@ import { CalendarDay, CalendarType, CalendarWeek } from '../../utils/@types/comp
 import { falseCalendarData } from './falseCalendarData'
 import { Alert } from 'react-native'
 import { getCalData } from './getCalData'
+import { TUserSchedule } from '../../utils/@types/_ministery/schedule'
 
 
-const Calendar = () => {
+type Props = {
+  arrangements?: TUserSchedule
+}
+
+const Calendar = ({arrangements}:Props) => {
 
 
   const [cDate, setCurrentDate] = useState<Date>(new Date())
@@ -30,7 +35,7 @@ const Calendar = () => {
     ))
 
   useEffect(() => {
-    getCalData(new Date().getMonth(), setCalendarData)
+    getCalData(new Date().getMonth(), setCalendarData, arrangements)
   }, [])
 
 

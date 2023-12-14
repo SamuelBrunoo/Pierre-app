@@ -1,65 +1,84 @@
-import { Alert } from "react-native"
-import { CalendarType, CalendarWeek } from "../../utils/@types/components/Calendar"
+import { Alert } from 'react-native'
+import {
+  CalendarType,
+  CalendarWeek,
+} from '../../utils/@types/components/Calendar'
+import { TUserSchedule } from '../../utils/@types/_ministery/schedule'
 
 
 export const getCalData = (
   newMonth: number,
-  setCalendarData: React.Dispatch<React.SetStateAction<CalendarType>>
+  setCalendarData: React.Dispatch<React.SetStateAction<CalendarType>>,
+  uArrg?: TUserSchedule
 ) => {
+
   const [cDate, cMonth, cYear] = [
     new Date().getDate(),
-    newMonth,
-    new Date().getFullYear()
+    newMonth + 1,
+    new Date().getFullYear(),
   ]
-  const pastMonthDay = (new Date(cYear, newMonth, 0))
+  const pastMonthDay = new Date(cYear, newMonth, 0)
 
-  const daysInMonth =
-    new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()
+  const daysInMonth = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    0,
+  ).getDate()
 
   let rows: CalendarWeek[] = []
 
   for (let r = 1; r <= 6; r++) {
     let row: CalendarWeek = { rowNumber: r, days: [] }
 
-    if (r == 1) {
-      if (pastMonthDay.getDay() < 6) {
-        for (let i = 1; i <= 7; i++) {
-          const inPastMonth = pastMonthDay.getDate() - (6 - i) <= pastMonthDay.getDate()
-          const dayN = inPastMonth ?
-            pastMonthDay.getDate() - (6 - i) :
-            i - ((r - 1) + 6)
+    if (pastMonthDay.getDay() < 6) {
+      if (r === 1) {
+        for (let i = 0; i <= 6; i++) {
+          const inPastMonth = i <= pastMonthDay.getDay()
+
+          const dayN = inPastMonth
+            ? pastMonthDay.getDate() - (pastMonthDay.getDay() - i)
+            : (6 + (-r - i) - 1) * -1
 
           row.days.push({
             cMonth: !inPastMonth,
             id: 'id',
-            number: dayN
+            number: dayN,
           })
         }
       } else {
-        for (let i = 1; i <= 7; i++) {
-          const dayN = i + ((r - 1) * 7)
+        for (let i = 0; i < 7; i++) {
+          const dayN = i + (r - 1) * 7 - pastMonthDay.getDay()
           row.days.push({
-            cMonth: true,
+            cMonth: dayN <= daysInMonth,
             id: 'id',
-            number: dayN
+            number: dayN <= daysInMonth ? dayN : dayN - daysInMonth,
           })
         }
       }
-    }
-    else {
-      for (let i = 1; i <= 7; i++) {
-        const dayN = i + ((r - 1) * 7)
-        row.days.push({
-          cMonth: dayN <= daysInMonth,
-          id: 'id',
-          number: (dayN <= daysInMonth) ? dayN : dayN - daysInMonth
-        })
+    } else {
+      if (r === 1) {
+        for (let i = 1; i <= 7; i++) {
+          const dayN = i + (r - 1) * 7
+          row.days.push({
+            cMonth: true,
+            id: 'id',
+            number: dayN,
+          })
+        }
+      } else {
+        for (let i = 0; i < 7; i++) {
+          const dayN = i + (r - 1) * 7
+          row.days.push({
+            cMonth: dayN <= daysInMonth,
+            id: 'id',
+            number: dayN <= daysInMonth ? dayN : dayN - daysInMonth,
+          })
+        }
       }
     }
 
     rows.push(row)
   }
-
 
   const newData = { rows }
   setCalendarData(newData)

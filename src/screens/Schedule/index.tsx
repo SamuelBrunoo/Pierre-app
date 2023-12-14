@@ -2,9 +2,13 @@ import React from 'react'
 import * as S from './styles'
 import { PlusIcon, ViewBigIcon } from '../../utils/imports/icons'
 import Calendar from '../../components/Calendar'
+import { useMMKVObject } from 'react-native-mmkv'
+import { LocalUserInfo } from '../../utils/@types/_user/local'
 
 
 const ScheduleScreen = () => {
+
+  const [user, setUserInfo] = useMMKVObject<LocalUserInfo>('user')
 
 
   return (
@@ -17,7 +21,7 @@ const ScheduleScreen = () => {
       }}
     >
       <S.Container>
-        <Calendar />
+        <Calendar arrangements={user?.schedule} />
         <S.Legends>
           <S.Legend>
             <S.LegendColor color={'orange'} />

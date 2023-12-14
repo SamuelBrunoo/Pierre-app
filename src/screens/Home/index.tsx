@@ -40,6 +40,23 @@ const HomeScreen = () => {
     setIsRefreshing(false)
   }
 
+  const calcScheduleItems = () => {
+    const today = new Date()
+    const dateString = getDateString(today, 'usa')
+
+    let actEls: ActivityType[] = []
+
+    user?.schedule.weekly[(today.getDay() as 0, 1, 2, 3, 4, 5, 6)].forEach(a =>
+      actEls.push(a),
+    )
+
+    user?.schedule.puntuals.forEach(p => {
+      if (p.date === dateString) actEls = [...actEls, ...p.activities]
+    })
+
+    return actEls.length
+  }
+
   const renderSchedule = () => {
     const today = new Date()
     const dateString = getDateString(today, 'usa')
@@ -99,20 +116,10 @@ const HomeScreen = () => {
         </S.PageHead>
 
         <S.TodayAgenda>
-          <S.AgendaTitle>
-            Programação (
-            {
-              user?.schedule.weekly[
-                (new Date().getDay() as 0, 1, 2, 3, 4, 5, 6)
-              ].length
-            }
-            )
-          </S.AgendaTitle>
+          <S.AgendaTitle>Programação ({calcScheduleItems()})</S.AgendaTitle>
           <S.AgendaList
             nestedScrollEnabled={true}
-            contentContainerStyle={{
-              rowGap: 10,
-            }}>
+            contentContainerStyle={{ rowGap: 10 }}>
             {renderSchedule()}
           </S.AgendaList>
         </S.TodayAgenda>
