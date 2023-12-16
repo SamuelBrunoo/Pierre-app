@@ -16,6 +16,7 @@ import CheckLightIcon from '../../assets/icons/check_white.svg'
 import CheckOrangeIcon from '../../assets/icons/check_orange.svg'
 import ClockIcon from '../../assets/icons/clock.svg'
 import CloseIcon from '../../assets/icons/close.svg'
+import CloseGreyIcon from '../../assets/icons/close_grey.svg'
 import ExpandIcon from '../../assets/icons/expand.svg'
 import LocationIcon from '../../assets/icons/location.svg'
 import PlusIcon from '../../assets/icons/plus.svg'
@@ -42,6 +43,7 @@ export {
   CheckOrangeIcon,
   ClockIcon,
   CloseIcon,
+  CloseGreyIcon,
   ExpandIcon,
   LocationIcon,
   PlusIcon,

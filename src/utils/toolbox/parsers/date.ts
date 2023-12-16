@@ -26,3 +26,13 @@ export const getDateString = (
 
   return dateString
 }
+
+export const getHourString = (dt: Date | number) => {
+  const d = dt instanceof Date ? dt : new Date(dt)
+  const hour = padValue(d.getHours())
+  const mins = padValue(d.getMinutes())
+
+  const dateString = `${hour}:${mins}`
+
+  return dateString
+}

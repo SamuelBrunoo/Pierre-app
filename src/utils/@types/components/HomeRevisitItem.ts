@@ -1,4 +1,4 @@
-import { DayRevisit, TRevisitFStore } from "../_ministery/revisit"
+import { TRevisitFStore } from "../_ministery/revisit"
 
 export type HomeRevisitItemProps = {
   info: TRevisitFStore

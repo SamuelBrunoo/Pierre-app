@@ -264,11 +264,12 @@ const NewTalk = ({ handleClose }: Props) => {
     },
     picker: () => {
       return (
-        <DateHourPicker
-          type={pickerConfig.type}
-          date={date}
-          onSet={pickerConfig.type === 'date' ? handleDate : handleTime}
-        />
+        <></>
+        // <DateHourPicker
+        //   type={pickerConfig.type}
+        //   date={date}
+        //   onSet={pickerConfig.type === 'date' ? handleDate : handleTime}
+        // />
       )
     },
   }

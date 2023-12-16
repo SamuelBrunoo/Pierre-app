@@ -10,6 +10,7 @@ export const light = {
   background: {
     default: "#EDEDED",
     cards: "#F7F7F7",
+    whiteLight: "#F7F7F7",
     modal: "rgba(186, 186, 186, 0.6)",
   },
   paddings: {

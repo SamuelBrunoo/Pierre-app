@@ -15,11 +15,17 @@ import { getDateString } from '../../utils/toolbox/parsers/date'
 import { useNavigation } from '@react-navigation/native'
 import { getStorageData } from '../../store/mmkv'
 import { TRevisitFStore } from '../../utils/@types/_ministery/revisit'
-import { TabsProps } from '../../navigators/Main'
+import {
+  DrawerProps,
+  DrawerRoutes,
+  HomeProps,
+  HomeRoutes,
+} from '../../navigators/Main'
 import useStore from '../../store'
 
 const HomeScreen = () => {
-  const navigation = useNavigation<TabsProps>()
+  const appNavigation = useNavigation<DrawerProps>()
+  const navigation = useNavigation<HomeProps>()
 
   const { user, User } = useStore(state => state)
   const [_, setUserInfo] = useMMKVObject<LocalUserInfo>('user')
@@ -74,16 +80,33 @@ const HomeScreen = () => {
     return actEls.map((a, k) => <HomeAgendaItem key={k} event={a} />)
   }
 
-  const goTo = (route: string) => {
+  const goTo = (
+    stack: 'current' | 'app',
+    route: HomeRoutes | DrawerRoutes,
+    subScreen?: string,
+    params?: any,
+  ) => {
     // @ts-ignore
-    navigation.navigate('Main', { screen: route })
+    if (stack === 'current') {
+      navigation.navigate(route as HomeRoutes)
+    } else if (stack === 'app') {
+      const options = subScreen
+        ? {
+            screen: subScreen,
+            params: params ?? undefined,
+          }
+        : undefined
+        
+      // @ts-ignore
+      appNavigation.navigate(route, options)
+    }
   }
 
   const openRevisit = (revisit: TRevisitFStore) => {
-    navigation.navigate('Talks', {
-      single: true,
-      data: revisit,
-    })
+    // navigation.navigate('Talks', {
+    //   single: true,
+    //   data: revisit,
+    // })
   }
 
   useEffect(() => {
@@ -125,19 +148,13 @@ const HomeScreen = () => {
         </S.TodayAgenda>
       </S.Container>
       <S.Shortcuts>
-        <S.Shortcut>
+        <S.Shortcut onPress={() => goTo('current', 'reportDay')}>
           <S.ScIconArea>
             <icons.ClockIcon />
           </S.ScIconArea>
           <S.ScName numberOfLines={1}>Registrar dia</S.ScName>
         </S.Shortcut>
-        <S.Shortcut
-          onPress={() =>
-            setModal({
-              showing: true,
-              type: 'newTalk',
-            })
-          }>
+        <S.Shortcut onPress={() => goTo('current', 'noteTalk')}>
           <S.ScIconArea>
             <icons.PlusIcon />
           </S.ScIconArea>
@@ -148,10 +165,10 @@ const HomeScreen = () => {
         <S.InfoResume>
           <S.TopBlock>
             <S.InfoTitle>Relatório atual</S.InfoTitle>
-            <S.Seemore activeOpacity={1} onPress={() => goTo('Reports')}>
+            {/* <S.Seemore activeOpacity={1} onPress={() => goTo('Reports')}>
               <S.SeeMoreText>Ver mais</S.SeeMoreText>
               <icons.ArrowThickGrey />
-            </S.Seemore>
+            </S.Seemore> */}
           </S.TopBlock>
           <S.ReportList>
             {user?.current_report && (
@@ -194,7 +211,7 @@ const HomeScreen = () => {
         <S.InfoResume>
           <S.TopBlock>
             <S.InfoTitle>Revisitas</S.InfoTitle>
-            <S.Seemore activeOpacity={1} onPress={() => goTo('Talks')}>
+            <S.Seemore activeOpacity={1} onPress={() => goTo('app', 'Talks')}>
               <S.SeeMoreText>Ver mais</S.SeeMoreText>
               <icons.ArrowThickGrey />
             </S.Seemore>

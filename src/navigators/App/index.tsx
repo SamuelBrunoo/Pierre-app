@@ -33,7 +33,7 @@ const AppNavigator = () => {
       const pData = getStorageData('user')
       User.storeInfo(pData)
 
-      if (pData.logged) setRenderInfo({ isLogged: true, canRender: true })
+      if (pData && pData.logged) setRenderInfo({ isLogged: true, canRender: true })
       else setRenderInfo({ isLogged: false, canRender: true })
     }
   }, [])

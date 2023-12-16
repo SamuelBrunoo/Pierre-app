@@ -10,6 +10,7 @@ import {
   DrawerContentScrollView,
   DrawerItem,
   DrawerItemList,
+  DrawerNavigationProp,
   createDrawerNavigator,
 } from '@react-navigation/drawer'
 
@@ -26,15 +27,39 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { BackIcon, SettingsIcon, SignOutIcon } from '../../utils/imports/icons'
+import { SignOutIcon } from '../../utils/imports/icons'
 import useStore from '../../store'
 import { useNavigation } from '@react-navigation/native'
 import { AppNavProps, AppRoutes } from '../App'
 import { TRevisitFStore } from '../../utils/@types/_ministery/revisit'
-import TalkView from '../../screens/subscreens/TalkView'
-import LeftBack from '../../components/Header/LeftBack'
+import {
+  NativeStackHeaderProps,
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack'
+import theme from '../../assets/styles/themes'
+import ReportDay from '../../screens/subscreens/ReportDay'
+import NoteTalk from '../../screens/subscreens/NoteTalk'
 
-export type TabsRoutes = {
+// Routes
+export type DrawerRoutes = 'Home' | 'Talks'
+export type HomeRoutes = 'mainHome' | 'reportDay' | 'noteTalk'
+export type TalksRoutes = 'mainTalks'
+
+export type TDrawerRoutes = {
+  [k in DrawerRoutes]: undefined
+}
+export type THomeRoutes = {
+  [k in HomeRoutes]: undefined
+}
+export type TTalksRoutes = {
+  mainTalks: {
+    single?: boolean
+    data?: TRevisitFStore
+  }
+}
+
+export type StackRoutes = {
   Home: undefined
   Talks: {
     single?: boolean
@@ -47,10 +72,18 @@ export type TabsRoutes = {
   Schedule: undefined
 }
 
-export type TabsProps = BottomTabNavigationProp<TabsRoutes>
+export type TabsProps = BottomTabNavigationProp<StackRoutes>
+export type DrawerProps = DrawerNavigationProp<TDrawerRoutes>
 
-const Tab = createBottomTabNavigator<TabsRoutes>()
-const Drawer = createDrawerNavigator()
+const Drawer = createDrawerNavigator<TDrawerRoutes>()
+
+// Pages navigators
+const HomeStack = createNativeStackNavigator<THomeRoutes>()
+const TalksStack = createNativeStackNavigator<TTalksRoutes>()
+
+// Pages props
+export type HomeProps = NativeStackNavigationProp<THomeRoutes>
+export type TalksProps = NativeStackNavigationProp<TTalksRoutes>
 
 const CustomDrawer = (props: DrawerContentComponentProps) => {
   const { user, User } = useStore(state => state)
@@ -74,9 +107,9 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
         <DrawerItem
           label={'Configurações'}
           onPress={() => null}
-          activeTintColor="#FFF"
           style={styles.drawerItem}
-          inactiveTintColor="#AFAFAF"
+          inactiveTintColor={theme.colors.blackPiano}
+          activeTintColor={theme.colors.orange}
         />
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
@@ -91,72 +124,75 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
 }
 
 const MainNavigator = () => {
-  const renderTabs = () => {
+  const renderHome = () => {
     return (
-      <Tab.Navigator
-        sceneContainerStyle={styles.tabsBgColor}
+      <HomeStack.Navigator
         screenOptions={{
-          tabBarStyle: styles.tabBar,
           headerShown: false,
-          tabBarShowLabel: false,
+          headerShadowVisible: false,
+          ...(mainScreensHeaderProps as Partial<NativeStackHeaderProps>),
+        }}>
+        <HomeStack.Screen
+          name="mainHome"
+          component={HomeScreen}
+          options={{ ...drawerOptions.default }}
+        />
+        <HomeStack.Screen
+          name="reportDay"
+          component={ReportDay}
+          options={{
+            headerTitle: "Registrar dia"
+          }}
+        />
+        <HomeStack.Screen
+          name="noteTalk"
+          component={NoteTalk}
+          options={{
+            headerTitle: "Anotar conversa"
+          }}
+        />
+      </HomeStack.Navigator>
+    )
+  }
+
+  const renderTalks = () => {
+    return (
+      <TalksStack.Navigator
+        screenOptions={{
+          headerShown: false,
           headerShadowVisible: false,
         }}>
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            tabBarIcon: ({ focused }) => TabBarItem('home', focused),
-          }}
-        />
-        <Tab.Screen
-          name="Talks"
+        <TalksStack.Screen
+          name="mainTalks"
           component={TalksScreen}
           options={{
-            tabBarIcon: ({ focused }) => TabBarItem('talks', focused),
             headerTitle: 'Pessoas contatadas',
-            ...(mainScreensHeaderProps as Partial<BottomTabNavigationOptions>),
+            ...(mainScreensHeaderProps as Partial<NativeStackHeaderProps>),
           }}
         />
-        <Tab.Screen
-          name="Reports"
-          component={ReportsScreen}
-          options={{
-            tabBarIcon: ({ focused }) => TabBarItem('reports', focused),
-            headerTitle: 'Relatórios',
-            ...(mainScreensHeaderProps as Partial<BottomTabNavigationOptions>),
-          }}
-        />
-        <Tab.Screen
-          name="Schedule"
-          component={ScheduleScreen}
-          options={{
-            tabBarIcon: ({ focused }) => TabBarItem('schedule', focused),
-            headerTitle: 'Programação',
-            ...(mainScreensHeaderProps as Partial<BottomTabNavigationOptions>),
-          }}
-        />
-      </Tab.Navigator>
+      </TalksStack.Navigator>
     )
   }
 
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
-      screenOptions={{
-        drawerInactiveTintColor: '#AFAFAF',
-        drawerActiveTintColor: '#FFF',
-        drawerActiveBackgroundColor: '#333',
-        drawerItemStyle: styles.drawerItem,
-      }}>
+      screenOptions={drawerOptions.screen}>
       <Drawer.Screen
-        name="Principal"
+        name="Home"
         options={{
-          headerShown: false,
-          drawerStyle: {
-            width: Dimensions.get('screen').width * 0.7,
-          },
+          ...drawerOptions.default,
+          drawerLabel: 'Conversas',
         }}
-        children={renderTabs}
+        children={renderHome}
+      />
+      <Drawer.Screen
+        name="Talks"
+        options={{
+          ...drawerOptions.default,
+          drawerLabel: 'Conversas',
+        }}
+        children={renderTalks}
       />
     </Drawer.Navigator>
   )
@@ -165,18 +201,18 @@ const MainNavigator = () => {
 const styles = StyleSheet.create({
   drawerArea: {
     flex: 1,
-    backgroundColor: '#232323',
+    backgroundColor: theme.background.default,
     paddingVertical: 64,
     paddingHorizontal: 24,
   },
   username: {
     fontSize: 24,
-    color: '#FFF',
+    color: theme.colors.orange,
     fontWeight: '600',
   },
   email: {
     fontSize: 14,
-    color: '#AFAFAF',
+    color: theme.colors.lightGrey,
     fontWeight: '400',
   },
   drawerItem: { width: '100%', marginLeft: 0 },
@@ -192,17 +228,24 @@ const styles = StyleSheet.create({
   signoutText: {
     fontSize: 20,
     lineHeight: 24,
-    color: '#FFF',
+    color: theme.colors.orange,
     fontWeight: '400',
   },
-  tabsBgColor: {
-    backgroundColor: 'rgba(23, 23, 23, 1)',
-  },
-  tabBar: {
-    backgroundColor: '#3A3A3A',
-    borderTopWidth: 0,
-    height: 60,
-  },
 })
+
+const drawerOptions = {
+  screen: {
+    drawerInactiveTintColor: theme.colors.blackPiano,
+    drawerActiveTintColor: theme.colors.orange,
+    drawerActiveBackgroundColor: theme.colors.whiteLight,
+    drawerItemStyle: styles.drawerItem,
+  },
+  default: {
+    headerShown: false,
+    drawerStyle: {
+      width: Dimensions.get('screen').width * 0.7,
+    },
+  },
+}
 
 export default MainNavigator

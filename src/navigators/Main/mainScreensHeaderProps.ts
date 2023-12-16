@@ -1,3 +1,5 @@
+import theme from "../../assets/styles/themes"
+
 export default {
   headerShown: true,
   headerTitleAlign: 'center',
@@ -7,7 +9,7 @@ export default {
   },
   headerTitleStyle: {
     fontSize: 20,
-    color: '#FFF',
+    color: theme.colors.orange,
     fontWeight: "400"
   }
 }

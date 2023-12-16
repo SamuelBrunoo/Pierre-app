@@ -16,7 +16,24 @@ export const DateHourArea = styled.View`
   justify-content: space-between;
 `
 
+export const InfoTitle = styled.Text`
+  font-size: 24px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.blackPiano};
+`
+
 export const ActivitiesList = styled.ScrollView`
   flex: 1;
   margin: 20px 24px 12px 10px;
+`
+
+export const ButtonsArea = styled.View`
+  align-items: center;
+  gap: 36px;
+`
+
+export const BtnsRow = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  gap: 12px;
 `
