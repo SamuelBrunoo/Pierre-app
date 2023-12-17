@@ -3,6 +3,7 @@ import * as S from './styles'
 import { LocationIcon } from '../../utils/imports/icons'
 import { Image } from 'react-native'
 import { AdressInfo } from '../../utils/@types/Api/mapAdress'
+import theme from '../../assets/styles/themes'
 
 
 type Props = {
@@ -19,7 +20,7 @@ const MapArea = ({ mapExibitionToggler, snapUrl, address }: Props) => {
       <S.Container>
         <S.AreaLabel>Endereço</S.AreaLabel>
         <S.MapWrapper
-          style={S.shadowStyle}
+          style={theme.shadows.default}
           activeOpacity={.8}
           onPress={mapExibitionToggler}
         >

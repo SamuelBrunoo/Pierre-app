@@ -4,6 +4,7 @@ import { FieldError } from '../../utils/@types/loginForm'
 import * as S from './styles'
 import { ArrowThin } from '../../utils/imports/icons'
 import { TTerritory } from '../../utils/@types/_ministery/territory'
+import theme from '../../assets/styles/themes'
 
 type Person = {
   id: string
@@ -58,7 +59,7 @@ const Select = ({
     <S.Wrapper>
       <S.InputArea>
         <S.Placeholder error={error}>{placeholder}</S.Placeholder>
-        <S.SelectArea hasError={error.has} style={S.shadowStyle}>
+        <S.SelectArea hasError={error.has} style={theme.shadows.default}>
           <S.Choosed>{choosed?.name}</S.Choosed>
           <S.IconArea onPress={() => setShowingOpt(!showingOpt)}>
             <ArrowThin
@@ -79,7 +80,7 @@ const Select = ({
         </Animated.Text>
       </S.InputArea>
       <S.OptionsArea
-        style={S.shadowStyle}
+        style={theme.shadows.default}
         showing={showingOpt}
         contentContainerStyle={{
           paddingHorizontal: 10,

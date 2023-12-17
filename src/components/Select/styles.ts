@@ -1,20 +1,5 @@
 import styled from 'styled-components/native'
 import { FieldError } from "../../utils/@types/forms/newTalk"
-import { StyleSheet } from 'react-native'
-
-export const { shadowStyle } = StyleSheet.create({
-  shadowStyle: {
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 3.05,
-    elevation: 4,
-  }
-})
-
 
 export const Wrapper = styled.View`
   position: relative;
@@ -26,7 +11,7 @@ export const InputArea = styled.View`
 
 export const SelectArea = styled.View<{ hasError: boolean; }>`
   border-width: 1px;
-  background-color: 'rgba(41, 41, 41, 1)';
+  background-color: ${({ theme }) => theme.background.whiteLight};
   border-color: ${({ hasError }) => hasError ? 'rgba(193, 14, 14, 1)' : 'transparent'};
   border-radius: 4px;
   height: 48px;
@@ -37,7 +22,7 @@ export const SelectArea = styled.View<{ hasError: boolean; }>`
 
 export const Choosed = styled.Text`
   font-size: 14px;
-  color: 'rgba(255, 255, 255, 1)';
+  color: ${({ theme }) => theme.colors.blackPiano};
 
 `
 
@@ -47,9 +32,9 @@ export const Placeholder = styled.Text<{ error: FieldError }>`
   z-index: 2;
   top: -17px;
   font-size: 12px;
-  color: ${({ error }) => error.has ?
-    'rgba(193, 14, 14, 1)' :
-    'rgba(175, 175, 175, 1)'
+  color: ${({ theme, error }) => error.has ?
+    theme.colors.red :
+    theme.colors.orange
   };
 `
 
@@ -63,12 +48,12 @@ export const IconArea = styled.TouchableOpacity`
 `
 
 export const ErrorMessage = styled.Text`
-  color: 'rgba(193, 14, 14, 1)';
+  color: ${({ theme }) => theme.colors.red};
   font-size: 10px;
 `
 
 export const OptionsArea = styled.ScrollView<{ showing: boolean; }>`
-  background-color: 'rgba(41, 41, 41, 1)';
+  background-color: ${({ theme }) => theme.background.whiteLight};
   display: ${({ showing }) => showing ? 'flex' : 'none'};
   position: absolute;
   z-index: 3;
@@ -83,4 +68,6 @@ export const Option = styled.TouchableOpacity`
   padding: 4px 0;
 `
 
-export const OptionLabel = styled.Text``
+export const OptionLabel = styled.Text`
+  color: ${({ theme }) => theme.colors.blackPiano};
+`

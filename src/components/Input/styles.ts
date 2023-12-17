@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native"
+import theme from "../../assets/styles/themes"
 
 
 const styles = StyleSheet.create({
@@ -8,25 +9,19 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    backgroundColor: 'rgba(41, 41, 41, 1)',
-    borderColor: 'transparent', shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 3.05,
-    elevation: 4,
+    backgroundColor: theme.background.whiteLight,
+    borderColor: 'transparent',
+    ...theme.shadows.default,
     borderRadius: 4,
     fontSize: 14,
     paddingHorizontal: 10,
     paddingVertical: 9,
-    color: 'rgba(255, 255, 255, 1)',
+    color: theme.colors.blackPiano,
   },
   placeholder: {
     position: 'absolute',
     left: 10,
-    color: 'rgba(175, 175, 175, 1)',
+    color: theme.colors.orange,
     zIndex: 2,
   },
   errorMessage: {
