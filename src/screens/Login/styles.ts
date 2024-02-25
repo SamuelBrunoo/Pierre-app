@@ -34,14 +34,18 @@ export const ButtonArea = styled.View`
   align-items: center;
 `
 
-export const ForgotPassBtn = styled.TouchableHighlight`
+export const ForgotPassBtn = styled.TouchableOpacity`
   padding: 8px 24px;
   border-radius: 6px;
   width:60%;
   align-items: center;
+  opacity: 0.6;
 `
 
-export const ForgotPassTxt = styled.Text``
+export const ForgotPassTxt = styled.Text`
+  font-weight:300;
+  color: ${({theme}) => theme.colors.lightGrey};
+`
 
 export const ActionBtn = styled.TouchableHighlight`
   background-color: transparent;
@@ -50,6 +54,7 @@ export const ActionBtn = styled.TouchableHighlight`
   align-self: center;
   border-radius: 6px;
   align-items: center;
+  background-color: ${({theme}) => theme.colors.orange};
 `
 
 export const BtnText = styled.Text`

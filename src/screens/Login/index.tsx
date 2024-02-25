@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { withTheme } from 'styled-components'
 import * as S from './styles'
 
 import { FieldsErrors } from '../../utils/@types/loginForm'
@@ -12,7 +13,7 @@ import { Alert } from 'react-native'
 import Input from '../../components/Input'
 import { AppNavProps } from '../../navigators/App'
 
-const LoginScreen = () => {
+const LoginScreen = (props: any) => {
   const navigation = useNavigation<AppNavProps>()
   const User = useStore(state => state.User)
 
@@ -74,7 +75,7 @@ const LoginScreen = () => {
     <S.Page
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={{
-        backgroundColor: 'rgba(35, 35, 35, 1)',
+        backgroundColor: props.theme.background.default ?? '#EDEDED',
         padding: 24,
         flex: 1,
         justifyContent: 'center',
@@ -102,7 +103,7 @@ const LoginScreen = () => {
             <S.ActionBtn onPress={handleLogin} activeOpacity={0.8}>
               <S.BtnText>Entrar</S.BtnText>
             </S.ActionBtn>
-            <S.ForgotPassBtn onPress={() => null} activeOpacity={0.8}>
+            <S.ForgotPassBtn onPress={() => null} activeOpacity={1}>
               <S.ForgotPassTxt>Esqueci minha senha</S.ForgotPassTxt>
             </S.ForgotPassBtn>
           </S.ButtonArea>
@@ -112,4 +113,4 @@ const LoginScreen = () => {
   )
 }
 
-export default LoginScreen
+export default withTheme(LoginScreen)

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 import {
   createBottomTabNavigator,
   BottomTabNavigationOptions,
@@ -40,11 +40,12 @@ import {
 import theme from '../../assets/styles/themes'
 import ReportDay from '../../screens/subscreens/ReportDay'
 import NoteTalk from '../../screens/subscreens/NoteTalk'
+import TalkView from '../../screens/subscreens/TalkView'
 
 // Routes
 export type DrawerRoutes = 'Home' | 'Talks'
 export type HomeRoutes = 'mainHome' | 'reportDay' | 'noteTalk'
-export type TalksRoutes = 'mainTalks'
+export type TalksRoutes = 'mainTalks' | 'talkView'
 
 export type TDrawerRoutes = {
   [k in DrawerRoutes]: undefined
@@ -56,6 +57,9 @@ export type TTalksRoutes = {
   mainTalks: {
     single?: boolean
     data?: TRevisitFStore
+  }
+  talkView: {
+    rev: TRevisitFStore
   }
 }
 
@@ -170,6 +174,14 @@ const MainNavigator = () => {
             ...(mainScreensHeaderProps as Partial<NativeStackHeaderProps>),
           }}
         />
+        <TalksStack.Screen
+          name="talkView"
+          component={TalkView as FunctionComponent}
+          options={{
+            headerTitle: '',
+            ...(mainScreensHeaderProps as Partial<NativeStackHeaderProps>),
+          }}
+        />
       </TalksStack.Navigator>
     )
   }
@@ -182,7 +194,7 @@ const MainNavigator = () => {
         name="Home"
         options={{
           ...drawerOptions.default,
-          drawerLabel: 'Conversas',
+          drawerLabel: 'Home',
         }}
         children={renderHome}
       />

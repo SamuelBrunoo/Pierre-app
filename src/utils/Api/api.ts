@@ -4,12 +4,17 @@ import firestore from '@react-native-firebase/firestore'
 import { LoginRes } from '../@types/Api/login'
 import { verifySignInError } from './auxiliars'
 import { GetAddressRes } from '../@types/Api/mapAdress'
-import { SaveTalkProps, SaveTalkRes } from '../@types/Api/saveTalk'
+import {
+  SaveNewPersonTalkProps,
+  SaveRevisitTalkProps,
+  SaveTalkProps,
+  SaveTalkRes,
+} from '../@types/Api/saveTalk'
 import { Coordenates } from '../@types/maps'
 import { UserInfoRes } from '../@types/Api/getUserInfo'
 import { DayRevisit, TRevisitFStore } from '../@types/_ministery/revisit'
 import { FSUser } from '../@types/_user/firestore'
-import { dataToFB } from '../toolbox/parsers/dataToFB'
+import dataToFB from '../toolbox/parsers/dataToFB'
 
 const baseMapsUrl = 'https://maps.googleapis.com/maps/api/geocode/json'
 const mapsApiKey = 'AIzaSyCmnvjnpmx8Ab_WC07MSuqnwTVI4nPAUxs'
@@ -238,18 +243,55 @@ const updateTalk = async (): Promise<{ ok: boolean }> => {
 
 const saveTalk = async (
   userId: string,
-  talk: SaveTalkProps,
+  talk: SaveNewPersonTalkProps,
 ): Promise<SaveTalkRes> => {
   let result: SaveTalkRes = {
     ok: true,
   }
 
-  const d = dataToFB(userId, talk)
+  const d = dataToFB.newTalkParser(userId, talk)
 
   try {
     await firestore()
       .collection('talks')
       .add(d)
+      .catch(() => {
+        result = {
+          ok: false,
+          error: 'Oops.. Falha ao atualizar. Tente novamente mais tarde.',
+        }
+      })
+  } catch (error) {}
+
+  return result
+}
+
+const saveRevisit = async (
+  userId: string,
+  talk: SaveRevisitTalkProps,
+): Promise<SaveTalkRes> => {
+  let result: SaveTalkRes = {
+    ok: true,
+  }
+
+  const d = dataToFB.revisitParser(talk)
+
+  try {
+    await firestore()
+      .collection('talks')
+      .doc(talk.personId)
+      .set(
+        (fbTalk: TRevisitFStore) => ({
+          stage: fbTalk.stage + 1,
+          visits: {
+            ...fbTalk.visits,
+            d,
+          },
+        }),
+        {
+          merge: true,
+        },
+      )
       .catch(() => {
         result = {
           ok: false,
@@ -267,6 +309,7 @@ export default {
   getUserInfo,
   getAddress,
   saveTalk,
+  saveRevisit,
   updateTalk,
   updateT: (userId: string) => null,
 }

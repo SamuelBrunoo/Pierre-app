@@ -22,12 +22,11 @@ import MapViewFragment from '../../../components/MapViewFragment'
 import { useMMKV, useMMKVObject } from 'react-native-mmkv'
 import { LocalUserInfo } from '../../../utils/@types/_user/local'
 import { TTerritory } from '../../../utils/@types/_ministery/territory'
-import { CheckBox } from '../../../components/Modal/NewTalk/styles'
 import Checkbox from '../../../components/Checkbox'
-
-type Props = {
-  handleClose: () => void
-}
+import ModalComponent from '../../../components/Modal'
+import { SaveTalkProps } from '../../../utils/@types/Api/saveTalk'
+import { useNavigation } from '@react-navigation/native'
+import { HomeProps } from '../../../navigators/Main'
 
 const territories = [
   {
@@ -91,11 +90,24 @@ const persons = [
   },
 ]
 
-const NewTalk = ({ handleClose }: Props) => {
-  const [user] = useMMKVObject<LocalUserInfo>('user')
+const NewTalk = () => {
+  const navigation = useNavigation<HomeProps>()
+
+  const [user, setUserInfo] = useMMKVObject<LocalUserInfo>('user')
+
+  const [modal, setModal] = useState({ showing: false, type: 'saveLocation' })
 
   const mapViewRef = useRef<MapView | null>(null)
-  const [name, setName] = useState('')
+
+  // necessary data
+  const [isNew, setIsNew] = useState(true)
+  const [person, setPerson] = useState<{
+    id: null | string
+    name: string
+  }>({
+    id: null,
+    name: '',
+  })
   const [neighborhood, setNeighborhood] = useState<{
     id: string
     name: string
@@ -103,125 +115,141 @@ const NewTalk = ({ handleClose }: Props) => {
   const [notes, setNotes] = useState('')
   const [nextAbout, setNextAbout] = useState('')
   const [date, setDate] = useState((() => new Date())())
-  const [mapVisibility, setMapVisibility] = useState(false)
-  const [userVisibility, setUserVisibility] = useState(true)
   const [mapCoord, setMapCoord] = useState<Coordenates>({
     latitude: 0,
     longitude: 0,
   })
   const [marker, setMarker] = useState<CustomMarker | null>(null)
-  const [address, setAddress] = useState<string | null>(null)
+  const [address, setAddress] = useState<string>('')
+
   const [snap, setSnap] = useState<string | null>(null)
 
-  const [isNew, setIsNew] = useState(false)
-
   const [errors, setErrors] = useState<FieldsErrors>({
+    address: {
+      has: false,
+      message: 'Digite o endereço ou ponto de referência',
+    },
     name: { has: false, message: 'Digite ou escolha o nome da pessoa' },
     notes: { has: false, message: 'Por favor, faça uma anotação' },
-    territory: { has: false, message: 'Digite o território' },
-    nextAbout: { has: false, message: 'Digite o território' },
+    map: { has: false, message: 'Defina a localização' },
+    territory: { has: false, message: 'Escolha o território' },
+    nextAbout: { has: false, message: 'Digite o asunto da próxima visita' },
   })
-  const [pickerConfig, setPickerConfig] = useState<{
-    showing: boolean
-    type: 'date' | 'hour'
-  }>({ showing: false, type: 'date' })
 
-  const handleDate = (value: number) => {
-    setPickerConfig({
-      ...pickerConfig,
-      showing: false,
-    })
-    setDate(new Date(value))
-  }
+  // Functions
 
-  const handleTime = (value: number) => {
-    setPickerConfig({
-      ...pickerConfig,
-      showing: false,
-    })
-    const hourDate = new Date(value)
-    setDate(
-      new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        hourDate.getHours(),
-        hourDate.getMinutes(),
-      ),
-    )
+  const handleClose = () => {
+    //
   }
 
   const handleMapClick = () => {
-    setMapVisibility(!mapVisibility)
+    getUserLocation()
+      .then(({ coords: userLocation }) => {
+        console.log(userLocation)
+        setMapCoord({
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+        })
+        setMarker({
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+        })
+      })
+      .then(() => {
+        setTimeout(() => {
+          setModal({
+            ...modal,
+            showing: !modal.showing,
+          })
+        }, 500)
+      })
   }
 
-  const getAddressText = (address: AdressInfo) => {
-    let resStr = ''
-    if (address) {
-      const info = address.address_components
-
-      const streetId = info.findIndex(c => c.types.includes('route'))
-      const numberId = info.findIndex(c => c.types.includes('street_number'))
-
-      if (streetId > -1) resStr += info[streetId].long_name
-      if (numberId > -1) resStr += `, nº ${info[numberId].long_name}`
-      else resStr += ', sem nº'
-    }
-
-    return resStr
+  const saveLocationData = (data: {
+    snap: string | null
+    marker: Coordenates
+  }) => {
+    setSnap(data.snap)
+    setMarker(data.marker)
+    setModal({ showing: false, type: modal.type })
   }
 
-  const saveLocation = async () => {
-    const hasConnection = await NetInfo.fetch().then(s => s.isConnected)
-
-    setUserVisibility(false)
-
-    // get address and take snapshot
-    if (hasConnection) {
-      const adr = await Api.getAddress(mapCoord)
-      const adrJson = adr.results[0]
-      const adrText = getAddressText(adrJson)
-      setAddress(adrText)
-
-      // picture snapshot
-      const mapEl = mapViewRef.current
-      if (mapEl) {
-        const file = await mapEl.takeSnapshot({ format: 'jpg', result: 'file' })
-        setSnap(file)
-        setMapVisibility(false)
-      }
+  const handleName = (p: string, id?: string) => {
+    if (isNew) {
+      setPerson({ id: null, name: p })
     } else {
-      // save coords (to save when have internet) **actual/user location
-      // show only icon, and show coords as address, until get internet
-
-      setAddress(`lat ${mapCoord.latitude}, long ${mapCoord.longitude}`)
-      setMapVisibility(false)
+      if (id) setPerson({ id, name: p })
     }
-  }
-
-  const handlePressMap = (e: LongPressEvent) => {
-    const newCoords = e.nativeEvent.coordinate
-    setMarker(newCoords)
   }
 
   const verifyErrors = () => {
-    // const [nameError, notesError, mapCoordError, markerError, addressError] = [
-    const fields = [
-      { field: 'name', hasError: name.trim().length === 0 },
-      { field: 'notes', hasError: notes.trim().length === 0 },
-      {
-        field: 'mapCoord',
-        hasError: mapCoord.latitude === 0 || mapCoord.longitude === 0,
-      },
-      {
-        field: 'marker',
-        hasError: !marker || marker.latitude === 0 || marker.longitude === 0,
-      },
-      { field: 'address', hasError: !address || address.trim().length === 0 },
-    ]
+    let hasError: {
+      has: boolean
+      fields: { field: string; hasError: boolean }[]
+    } = {
+      has: false,
+      fields: [],
+    }
 
-    // verify if is new (then, if has location setted)
-    return fields.some(i => i.hasError === true)
+    if (isNew) {
+      const fields = [
+        { field: 'name', hasError: isNew && person.name.trim().length === 0 },
+        // {
+        //   field: 'map',
+        //   hasError:
+        //     isNew &&
+        //     (!mapCoord || mapCoord.latitude === 0 || mapCoord.longitude === 0),
+        // },
+        { field: 'address', hasError: !address || address.trim().length === 0 },
+        {
+          field: 'territory',
+          hasError: !neighborhood.id || neighborhood.id.trim().length === 0,
+        },
+        { field: 'notes', hasError: notes.trim().length === 0 },
+        // {
+        //   field: 'marker',
+        //   hasError: !marker || marker.latitude === 0 || marker.longitude === 0,
+        // },
+        {
+          field: 'nextAbout',
+          hasError: !nextAbout || nextAbout.trim().length === 0,
+        },
+      ]
+
+      if (fields.some(f => f.hasError)) {
+        hasError = {
+          has: true,
+          fields: fields,
+        }
+      }
+    } else {
+      const fields = [
+        { field: 'name', hasError: person.id?.trim().length === 0 },
+        { field: 'notes', hasError: notes.trim().length === 0 },
+        {
+          field: 'nextAbout',
+          hasError: !nextAbout || nextAbout.trim().length === 0,
+        },
+      ]
+
+      if (fields.some(f => f.hasError)) {
+        hasError = {
+          has: true,
+          fields: fields,
+        }
+      }
+    }
+
+    return hasError
+  }
+
+  const showErrors = (fields: { field: string; hasError: boolean }[]) => {
+    let newObj = { ...errors }
+    fields.forEach(f => {
+      // @ts-ignore
+      newObj[f.field] = { ...newObj[f.field], has: f.hasError }
+    })
+    setErrors(newObj)
   }
 
   const handleSave = async () => {
@@ -229,24 +257,52 @@ const NewTalk = ({ handleClose }: Props) => {
     const hasConnection = await NetInfo.fetch().then(s => s.isConnected)
 
     if (hasConnection) {
-      if (!hasErrors) {
-        const save = isNew
-          ? await Api.saveTalk(user?.id as string, {
-              address: address as string,
-              date,
-              neighborhood: neighborhood.name,
-              marker: marker ?? mapCoord,
-              name,
-              notes,
-            })
-          : await Api.updateTalk()
+      if (!hasErrors.has) {
+        let save = { ok: false }
+
+        if (isNew) {
+          //
+          const data: SaveTalkProps = {
+            address: address as string,
+            date,
+            neighborhood: neighborhood.id,
+            marker: marker ?? mapCoord,
+            name: person.name,
+            notes,
+          }
+
+          save = await Api.saveTalk(user?.id as string, data)
+        } else {
+          //
+          const data: SaveTalkProps = {
+            personId: person.id as string,
+            date,
+            notes,
+            nextAbout,
+          }
+
+          save = await Api.saveRevisit(user?.id as string, data)
+        }
 
         if (save.ok) {
-          handleClose()
+          navigation.pop()
           // save in local the returned parsed value?
+        } else {
+          Alert.alert(
+            'Não foi possível salvar',
+            'Será salvo como rascunho e você poderá terminar posteriormente.',
+            [
+              {
+                text: 'Ok',
+                onPress: () => {
+                  navigation.pop()
+                },
+              },
+            ],
+          )
         }
       } else {
-        // show errors
+        showErrors(hasErrors.fields)
       }
     } else {
       // save in local
@@ -254,44 +310,9 @@ const NewTalk = ({ handleClose }: Props) => {
     }
   }
 
-  const renders = {
-    map: () => {
-      return (
-        <MapViewFragment
-          userVisibility={userVisibility}
-          mapViewRef={mapViewRef}
-          mapCoord={mapCoord}
-          setMapCoord={setMapCoord}
-          handlePressMap={handlePressMap}
-          marker={marker}
-        />
-      )
-    },
-    picker: () => {
-      return (
-        <></>
-        // <DateHourPicker
-        //   type={pickerConfig.type}
-        //   date={date}
-        //   onSet={pickerConfig.type === 'date' ? handleDate : handleTime}
-        // />
-      )
-    },
-  }
-
   useEffect(() => {
-    // getUserLocation().then(({ coords: userLocation }) => {
-    //   console.log(userLocation)
-    //   setMapCoord({
-    //     latitude: userLocation.latitude,
-    //     longitude: userLocation.longitude,
-    //   })
-    //   setMarker({
-    //     latitude: userLocation.latitude,
-    //     longitude: userLocation.longitude,
-    //   })
-    // })
-  }, [])
+    console.log('Errors', errors)
+  }, [errors])
 
   return (
     <S.Page
@@ -299,6 +320,16 @@ const NewTalk = ({ handleClose }: Props) => {
         justifyContent: 'flex-start',
         flex: 1,
       }}>
+      <ModalComponent
+        visible={modal.showing}
+        setModal={setModal}
+        afterClose={() => {}}
+        saveLocationData={saveLocationData}
+        type={modal.type as 'saveLocation'}
+        mapData={{
+          mapCoord,
+        }}
+      />
       <S.Container>
         <S.DateHourArea>
           <DateHourPicker
@@ -317,115 +348,111 @@ const NewTalk = ({ handleClose }: Props) => {
           />
         </S.DateHourArea>
 
-        {mapVisibility && ( // && hasConnection
-          // if !hasConnection, show loading spinner to 'feedback' that some is
-          // data is being getted
-          <>
-            {renders.map()}
-            <S.ConfirmBtn onPress={saveLocation}>
-              <S.ConfirmBtnTxt>Salvar localização</S.ConfirmBtnTxt>
-            </S.ConfirmBtn>
-          </>
-        )}
-        {!mapVisibility && (
-          <>
-            <S.Content
-              contentContainerStyle={{
-                rowGap: 10,
-                paddingBottom: 40,
-                justifyContent: 'space-between',
-                flexGrow: 1,
-              }}>
-              <S.ContentPrincipal>
-                <Checkbox
-                  isChecked={!isNew}
-                  onChange={() => setIsNew(!isNew)}
-                  text="Já contatada"
+        <S.Content
+          contentContainerStyle={{
+            rowGap: 10,
+            paddingBottom: 20,
+            justifyContent: 'space-between',
+            flexGrow: 1,
+          }}
+          overScrollMode="never">
+          <S.ContentPrincipal>
+            <Checkbox
+              isChecked={!isNew}
+              onChange={() => setIsNew(!isNew)}
+              text="Já contatada"
+            />
+
+            {/* who is */}
+            <S.InputWrapper>
+              {isNew ? (
+                <Input
+                  type="none"
+                  value={person.name}
+                  onChange={v => handleName(v)}
+                  placeholder="Nome da pessoa"
+                  error={errors.name}
                 />
+              ) : (
+                <Select
+                  options={persons}
+                  value={persons[0]}
+                  onChange={v => handleName(v.name, v.id)}
+                  placeholder="Nome da pessoa"
+                  error={errors.name}
+                />
+              )}
+            </S.InputWrapper>
+            {isNew && (
+              <>
+                <MapArea
+                  mapExibitionToggler={handleMapClick}
+                  snapUrl={snap}
+                  error={errors.map}
+                />
+                <Input
+                  type="none"
+                  value={address}
+                  onChange={setAddress}
+                  placeholder="Endereço"
+                  error={errors.address}
+                />
+                {/* if has territories */}
+                <Select
+                  options={user?.territories as TTerritory[]}
+                  value={
+                    user?.territories.find(
+                      t => t.id === neighborhood.id,
+                    ) as TTerritory
+                  }
+                  onChange={t => setNeighborhood(t)}
+                  placeholder="Território"
+                  error={errors.territory}
+                  disabled={user?.territories && user.territories.length < 1}
+                />
+                {/* else show input disabled: 'Nenhum território cadastrado' */}
+              </>
+            )}
 
-                {/* who is */}
-                <S.InputWrapper>
-                  {isNew ? (
-                    <Input
-                      type="none"
-                      value={name}
-                      onChange={setName}
-                      placeholder="Nome da pessoa"
-                      error={errors.name}
-                    />
-                  ) : (
-                    <Select
-                      options={persons}
-                      value={persons[0]}
-                      onChange={v => setName(v.name)}
-                      placeholder="Nome da pessoa"
-                      error={errors.name}
-                    />
-                  )}
-                </S.InputWrapper>
-                {isNew && (
-                  <>
-                    <MapArea
-                      mapExibitionToggler={handleMapClick}
-                      snapUrl={snap}
-                      address={address}
-                    />
-                    {/* if has territories */}
-                    <Select
-                      options={user?.territories as TTerritory[]}
-                      value={
-                        user?.territories.find(
-                          t => t.id === neighborhood.id,
-                        ) as TTerritory
-                      }
-                      onChange={t => setNeighborhood(t)}
-                      placeholder="Território"
-                      error={errors.name}
-                    />
-                    {/* else show input disabled: 'Nenhum território cadastrado' */}
-                  </>
-                )}
-
-                <S.InputWrapper>
-                  <Input
-                    type="none"
-                    textarea={true}
-                    error={errors.notes}
-                    onChange={setNotes}
-                    placeholder="Anotação"
-                    value={notes}
-                  />
-                </S.InputWrapper>
-
-                <S.InputWrapper>
-                  <Input
-                    type="none"
-                    textarea={true}
-                    error={errors.nextAbout}
-                    onChange={setNextAbout}
-                    placeholder="Próximo assunto"
-                    value={nextAbout}
-                  />
-                </S.InputWrapper>
-              </S.ContentPrincipal>
-            </S.Content>
-            <S.BtnsArea>
-              <Button
-                type="default"
-                mode="cancel"
-                title="Cancelar"
-                action={handleClose}
+            {/* notes */}
+            <S.InputWrapper>
+              <Input
+                type="none"
+                textarea={true}
+                error={errors.notes}
+                onChange={setNotes}
+                placeholder="Anotação"
+                value={notes}
               />
-              <Button
-                type="default"
-                mode="confirm"
-                title="Salvar"
-                action={handleSave}
+            </S.InputWrapper>
+
+            {/* next about */}
+            <S.InputWrapper>
+              <Input
+                type="none"
+                textarea={true}
+                error={errors.nextAbout}
+                onChange={setNextAbout}
+                placeholder="Próximo assunto"
+                value={nextAbout}
               />
-            </S.BtnsArea>
-          </>
-        )}
-        {pickerConfig.showing && renders.picker()}
+            </S.InputWrapper>
+          </S.ContentPrincipal>
+        </S.Content>
+        <S.BtnsArea>
+          <Button
+            type="default"
+            mode="cancel"
+            title="Cancelar"
+            action={handleClose}
+          />
+          <Button
+            type="default"
+            mode="confirm"
+            title="Salvar"
+            action={handleSave}
+          />
+        </S.BtnsArea>
       </S.Container>
     </S.Page>
   )

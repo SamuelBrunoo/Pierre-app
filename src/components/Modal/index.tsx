@@ -1,7 +1,10 @@
 import React from 'react'
 import { Modal, Text } from 'react-native'
+import * as S from './styles'
 
 import NewTalk from './NewTalk'
+import SaveLocation from './SaveLocation'
+import { Coordenates } from '../../utils/@types/maps'
 
 type Props = {
   visible: boolean
@@ -12,14 +15,34 @@ type Props = {
     }>
   >
   afterClose?: () => void
-  type: 'newTalk'
+  saveLocationData?: (data: {
+    snap: string | null
+    marker: Coordenates
+  }) => void
+  type: 'saveLocation'
+  mapData?: {
+    mapCoord: Coordenates
+  }
 }
 
-const ModalComponent = ({ visible, setModal, type, afterClose }: Props) => {
+const ModalComponent = ({
+  visible,
+  setModal,
+  type,
+  afterClose,
+  saveLocationData,
+  mapData,
+}: Props) => {
   const Content = () => {
     switch (type) {
-      case 'newTalk':
-        return <NewTalk handleClose={handleClose} />
+      case 'saveLocation':
+        return (
+          <SaveLocation
+            handleClose={handleClose}
+            saveLocationData={saveLocationData}
+            mapData={mapData}
+          />
+        )
         break
     }
   }
@@ -33,13 +56,13 @@ const ModalComponent = ({ visible, setModal, type, afterClose }: Props) => {
   }
 
   return (
-    <Modal
+    <S.Modal
       visible={visible}
       animationType="fade"
       onRequestClose={handleClose}
       transparent={true}>
       <Content />
-    </Modal>
+    </S.Modal>
   )
 }
 

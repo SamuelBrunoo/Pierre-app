@@ -9,10 +9,10 @@ export const InputArea = styled.View`
   gap: 3px;
 `
 
-export const SelectArea = styled.View<{ hasError: boolean; }>`
+export const SelectArea = styled.TouchableOpacity<{ hasError: boolean; }>`
   border-width: 1px;
   background-color: ${({ theme }) => theme.background.whiteLight};
-  border-color: ${({ hasError }) => hasError ? 'rgba(193, 14, 14, 1)' : 'transparent'};
+  border-color: ${({ theme, hasError }) => hasError ? theme.colors.red : 'transparent'};
   border-radius: 4px;
   height: 48px;
   justify-content: center;
@@ -38,7 +38,7 @@ export const Placeholder = styled.Text<{ error: FieldError }>`
   };
 `
 
-export const IconArea = styled.TouchableOpacity`
+export const IconArea = styled.View`
   position: absolute;
   top: 0px;
   right: 0;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import * as S from './styles'
 import { Dimensions, Text } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { Route, useNavigation } from '@react-navigation/native'
 import {
   TFSVisit,
   TRevisitFStore,
@@ -10,20 +10,21 @@ import { AppNavProps } from '../../../navigators/App'
 import LeftBack from '../../../components/Header/LeftBack'
 import RevisitVisit from '../../../components/RevisitVisit'
 
-type Props = {
-  rev: TRevisitFStore | null | undefined
-  closeView: () => void
+interface Props {
+  route: Route<'talkView', {rev: TRevisitFStore}>
 }
 
-const TalkView = ({ rev, closeView }: Props) => {
+// const TalkView = ({ rev }: Props) => {
+const TalkView = ({route}: Props) => {
+  
   const navigation = useNavigation<AppNavProps>()
+  const { rev } = route.params
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: rev?.person_name ?? '',
-      headerLeft: () => <LeftBack backFn={closeView} />,
     })
-  }, [])
+  }, [rev])
 
   return (
     <S.Page
@@ -35,9 +36,14 @@ const TalkView = ({ rev, closeView }: Props) => {
       }}>
       <S.LocationSection>
         <S.TerritoryName>
-          {rev?.address ?? 'Localização não definida'}
+          {rev?.neighborhood ?? 'Localização não definida'}
         </S.TerritoryName>
-        <S.Map></S.Map>
+        {!!rev.location.latitude && !!rev.location.longitude &&
+          <S.Map></S.Map>
+        }
+        <S.Address>
+          {rev?.address ?? 'Endereço não definido'}
+        </S.Address>
       </S.LocationSection>
       <S.Next>
         <S.Title>Próxima conversa</S.Title>

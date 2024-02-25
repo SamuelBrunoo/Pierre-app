@@ -15,7 +15,6 @@ type Props = {
 
 const MapViewFragment = ({
   mapViewRef,
-  userVisibility,
   mapCoord,
   setMapCoord,
   handlePressMap,

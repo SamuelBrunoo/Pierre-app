@@ -1,6 +1,6 @@
 import React from 'react'
 import { TouchableOpacity } from 'react-native'
-import { BackIcon } from '../../utils/imports/icons'
+import { BackBlackIcon } from '../../utils/imports/icons'
 import { useNavigation } from '@react-navigation/native'
 
 type Props = {
@@ -24,7 +24,7 @@ const LeftBack = ({ backFn }: Props) => {
         paddingHorizontal: 20,
         paddingVertical: 20,
       }}>
-      <BackIcon />
+      <BackBlackIcon />
     </TouchableOpacity>
   )
 }

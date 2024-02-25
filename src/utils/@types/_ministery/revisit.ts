@@ -22,4 +22,5 @@ export type TRevisitFStore = {
 export type TFSVisit = {
   date: number
   notes: string
+  nextAbout: string
 }

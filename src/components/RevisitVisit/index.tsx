@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import * as S from './styles'
 import { TFSVisit } from '../../utils/@types/_ministery/revisit'
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import { Animated } from 'react-native'
 
 type Props = {
   info: TFSVisit
@@ -10,7 +10,10 @@ type Props = {
 const RevisitVisit = ({ info }: Props) => {
   const date = new Date(info.date)
 
+  const animHeight = useRef(new Animated.Value(0)).current
+
   const [isOpened, setIsOpened] = useState(false)
+  const [contentSize, setContentSize] = useState(0)
 
   const renderDate = () => {
     const [y, m, d] = [
@@ -29,19 +32,47 @@ const RevisitVisit = ({ info }: Props) => {
     return `${hour}:${minutes}`
   }
 
-  const animatedStyle = useAnimatedStyle(()=>({
-    ...S.expanded,
-    height: isOpened ? withTiming(100) : withTiming(0)
-  }))
+  useEffect(() => {
+    animProp(isOpened ? 'open' : 'close')
+  }, [isOpened])
+
+  const animProp = (action: 'open' | 'close') => {
+    action === 'open'
+      ? Animated.timing(animHeight, {
+          toValue: contentSize,
+          duration: 200,
+          useNativeDriver: false,
+        }).start()
+      : Animated.timing(animHeight, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: false,
+        }).start()
+  }
 
   return (
-    <S.El activeOpacity={.8} onPress={()=>setIsOpened(!isOpened)}>
+    <S.El activeOpacity={0.8} onPress={() => setIsOpened(!isOpened)}>
       <S.Top>
         <S.Date>{renderDate()}</S.Date>
       </S.Top>
-      <Animated.View style={animatedStyle}>
-        <S.Notes>{info.notes}</S.Notes>
-        <S.Hour>{renderHour()}</S.Hour>
+      <Animated.View style={{ ...S.expanded, height: animHeight }}>
+        <S.Notes
+          onTextLayout={ev => {
+            console.log(ev.nativeEvent.lines.length)
+            setContentSize((ev.nativeEvent.lines.length * 14) + 36)
+          }}
+        >{info.notes}</S.Notes>
+        <S.Bottom>
+          <S.Btns>
+            <S.BottomBtn>
+              <S.BtnText from={'delete'}>Excluir</S.BtnText>
+            </S.BottomBtn>
+            {/* <S.BottomBtn>
+              <S.BtnText from={'edit'}>Editar</S.BtnText>
+            </S.BottomBtn> */}
+          </S.Btns>
+          <S.Hour>{renderHour()}</S.Hour>
+        </S.Bottom>
       </Animated.View>
     </S.El>
   )

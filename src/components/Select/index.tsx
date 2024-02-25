@@ -17,6 +17,7 @@ type Props = {
   value: Person | TTerritory
   onChange: (v: Person | TTerritory) => void
   error: FieldError
+  disabled?: boolean
 }
 
 const Select = ({
@@ -25,6 +26,7 @@ const Select = ({
   value,
   onChange,
   error,
+  disabled,
 }: Props): JSX.Element => {
   const errOpacity = useRef(new Animated.Value(0)).current
 
@@ -59,9 +61,15 @@ const Select = ({
     <S.Wrapper>
       <S.InputArea>
         <S.Placeholder error={error}>{placeholder}</S.Placeholder>
-        <S.SelectArea hasError={error.has} style={theme.shadows.default}>
-          <S.Choosed>{choosed?.name}</S.Choosed>
-          <S.IconArea onPress={() => setShowingOpt(!showingOpt)}>
+        <S.SelectArea
+          hasError={error.has}
+          style={theme.shadows.default}
+          onPress={() => (disabled ? null : setShowingOpt(!showingOpt))}
+          activeOpacity={disabled ? 1 : .7}>
+          <S.Choosed>
+            {disabled ? 'Não há territórios cadastrados' : choosed?.name}
+          </S.Choosed>
+          <S.IconArea>
             <ArrowThin
               width={24}
               height={24}
@@ -73,7 +81,9 @@ const Select = ({
         </S.SelectArea>
         <Animated.Text
           style={{
-            color: 'rgba(193, 14, 14, 1)',
+            color: theme.colors.red,
+            fontSize: 10,
+            marginTop: 6,
             opacity: errOpacity,
           }}>
           {error.message}

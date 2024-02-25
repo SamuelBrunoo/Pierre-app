@@ -4,54 +4,46 @@ import useStore from '../../store'
 import { ArrowThin } from '../../utils/imports/icons'
 import TalkItem from '../../components/TalkItem'
 import { TRevisitFStore } from '../../utils/@types/_ministery/revisit'
-import {
-  BottomTabNavigationProp,
-  BottomTabScreenProps,
-} from '@react-navigation/bottom-tabs'
-import { TabsProps, TabsRoutes } from '../../navigators/Main'
 import TalkView from '../subscreens/TalkView'
 import { useNavigation } from '@react-navigation/native'
 import { AppNavProps } from '../../navigators/App'
 import { TTerritory } from '../../utils/@types/_ministery/territory'
+import { TalksProps } from '../../navigators/Main'
 
-type TalksScreenProps = {
-  navigation: BottomTabNavigationProp<TabsRoutes>
-  route: {
-    params: {
-      single?: boolean | undefined
-      data?: TRevisitFStore | null
-    }
-  }
+type TOrderBy = {
+  label: string
+  value: 'recent' | 'old' | 'name'
 }
 
-type TOrderBy = 'recent' | 'old' | 'name'
-const LOrderBy = [
+type TTerrState = {
+  selected: TTerritory | undefined
+  list: TTerritory[]
+}
+
+const LOrderBy: TOrderBy[] = [
   { label: 'Mais recente', value: 'recent' },
   { label: 'Mais antigo', value: 'old' },
   { label: 'Nome', value: 'name' },
 ]
 
-const TalksScreen = ({ navigation, route }: TalksScreenProps) => {
+const TalksScreen = () => {
   const appNavigation = useNavigation<AppNavProps>()
+  const talksNavigation = useNavigation<TalksProps>()
 
   const user = useStore(store => store.user)
   const [singleInfo, setSingleInfo] = useState<TRevisitFStore | null>(null)
 
   // Filters
-  const [territories, setTerritories] = useState<{
-    selected: TTerritory | undefined
-    list: TTerritory[]
-  }>({ selected: undefined, list: [] })
-  const [orderBy, setOrderBy] = useState<TOrderBy>('recent')
-  const [showingCat, setShowingCat] = useState<0 | 1 | 2>(1)
+  const [territories, setTerritories] = useState<TTerrState>({ selected: undefined, list: [] })
+  const [orderBy, setOrderBy] = useState<TOrderBy>(LOrderBy[0])
+  const [showingCat, setShowingCat] = useState<0 | 1 | 2>(0)
   const [list, setList] = useState<TRevisitFStore[]>([])
 
   const [regDdShow, setRegDdShow] = useState(false)
   const [ordDdShow, setOrdDdShow] = useState(false)
 
   const openRevisit = (revInfo: TRevisitFStore) => {
-    setSingleInfo(revInfo)
-    console.log(revInfo.person_name)
+    talksNavigation.navigate("talkView", { rev: revInfo })
   }
 
   const handleCloseSingle = () => {
@@ -64,8 +56,11 @@ const TalksScreen = ({ navigation, route }: TalksScreenProps) => {
   }
 
   useEffect(() => {
+    console.log(JSON.stringify(list))
+  }, [list])
+
+  useEffect(() => {
     if (user) {
-      console.log(user.territories)
       // user.revisits.forEach(r => console.log(r.neighborhood))
       const filtered = user.revisits.filter(r => r.stage === showingCat)
       setList(filtered)
@@ -82,41 +77,32 @@ const TalksScreen = ({ navigation, route }: TalksScreenProps) => {
     })
   }, [user?.territories])
 
-  useEffect(() => {
-    if (route.params) {
-      const { single, data } = route.params
-      if (single && data) openRevisit(data)
-    }
-  }, [route])
-
   return (
     <S.Page
+      nestedScrollEnabled={true}
       contentContainerStyle={{
         justifyContent: 'flex-start',
         flex: 1,
       }}>
-      {singleInfo && (
-        <TalkView rev={singleInfo} closeView={handleCloseSingle} />
-      )}
       <S.Container>
         <S.CategoriesTabs>
           <S.Category
             activeOpacity={1}
             active={showingCat === 0}
             onPress={() => setShowingCat(0)}>
-            <S.CatName>1ª conversa</S.CatName>
+            <S.CatName active={showingCat === 0}>1ª conversa</S.CatName>
           </S.Category>
           <S.Category
             activeOpacity={1}
             active={showingCat === 1}
             onPress={() => setShowingCat(1)}>
-            <S.CatName>Revisita</S.CatName>
+            <S.CatName active={showingCat === 1}>Revisita</S.CatName>
           </S.Category>
           <S.Category
             activeOpacity={1}
             active={showingCat === 2}
             onPress={() => setShowingCat(2)}>
-            <S.CatName>Estudo</S.CatName>
+            <S.CatName active={showingCat === 2}>Estudo</S.CatName>
           </S.Category>
         </S.CategoriesTabs>
         <S.Filters>
@@ -124,33 +110,52 @@ const TalksScreen = ({ navigation, route }: TalksScreenProps) => {
             <S.DropTop
               activeOpacity={1}
               onPress={() => setRegDdShow(!regDdShow)}>
-              <S.DropName>Região</S.DropName>
-              <ArrowThin />
+                <S.SelectTitle>
+                  <S.DropName>Região</S.DropName>
+                  <ArrowThin />
+                </S.SelectTitle>
+              <S.Selected>{territories.selected?.name ?? ''}</S.Selected>
             </S.DropTop>
-            <S.Selected>{territories.selected?.name ?? ''}</S.Selected>
             <S.Dropdown visible={regDdShow}>
               <S.DropDownContent>
                 {territories.list.map((t, k) => (
-                  <S.DropDownItem key={k}>
-                    <S.DDIText>{t.name}</S.DDIText>
+                  <S.DropDownItem key={k}
+                    onPress={() => {
+                      setRegDdShow(false)
+                      setTerritories({
+                        ...territories,
+                        selected: t
+                      })
+                    }}
+                    activeOpacity={1}
+                  >
+                    <S.DDIText >{t.name}</S.DDIText>
                   </S.DropDownItem>
                 ))}
               </S.DropDownContent>
             </S.Dropdown>
           </S.DropdownArea>
-          <S.DropdownArea>
+          <S.DropdownArea right={true}>
             <S.DropTop
               activeOpacity={0.8}
               onPress={() => setOrdDdShow(!ordDdShow)}>
-              <S.DropName>Ordernar por</S.DropName>
-              <ArrowThin />
+                <S.SelectTitle>
+                  <S.DropName>Ordenar por</S.DropName>
+                  <ArrowThin />
+                </S.SelectTitle>
+              <S.Selected>{orderBy.label}</S.Selected>
             </S.DropTop>
-            <S.Selected>Mais recente</S.Selected>
             <S.Dropdown visible={ordDdShow} right={true}>
               <S.DropDownContent>
                 {LOrderBy.map((o, k) => (
-                  <S.DropDownItem key={k}>
-                    <S.DDIText>{o.label}</S.DDIText>
+                  <S.DropDownItem key={k}
+                    onPress={() => {
+                      setOrdDdShow(false)
+                      setOrderBy(o)
+                    }}
+                    activeOpacity={1}
+                  >
+                    <S.DDIText >{o.label}</S.DDIText>
                   </S.DropDownItem>
                 ))}
               </S.DropDownContent>
@@ -161,7 +166,7 @@ const TalksScreen = ({ navigation, route }: TalksScreenProps) => {
       <S.TalksList
         contentContainerStyle={{
           rowGap: 12,
-          paddingTop: 10,
+          paddingVertical: 10,
         }}>
         {list.map((item, k) => (
           <TalkItem key={k} talk={item} onSelect={openRevisit} />

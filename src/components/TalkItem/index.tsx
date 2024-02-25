@@ -21,7 +21,10 @@ const TalkItem = ({ talk, onSelect }: Props) => {
       }}
       onPress={() => onSelect(talk)}>
       <S.Left>
-        <S.PersonName>{talk.person_name}</S.PersonName>
+        <S.Names>
+          <S.PersonName>{talk.person_name}</S.PersonName>
+          <S.LocationName>{talk.neighborhood}</S.LocationName>
+        </S.Names>
         <S.LastDate>
           {dateParser.getDateString(
             (talk?.last_date as Date | number) ?? 0,
@@ -30,8 +33,9 @@ const TalkItem = ({ talk, onSelect }: Props) => {
         </S.LastDate>
       </S.Left>
       <S.Right>
-        <S.LocationName>{talk.neighborhood}</S.LocationName>
-        <LocationIcon />
+        {!!talk.location.latitude && !!talk.location.longitude &&
+          <LocationIcon />
+        }
       </S.Right>
     </S.El>
   )

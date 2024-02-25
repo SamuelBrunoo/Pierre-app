@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   errorMessage: {
-    color: 'rgba(193, 14, 14, 1)',
+    color: theme.colors.red,
     fontSize: 10
   }
 })

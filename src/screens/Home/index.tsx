@@ -46,6 +46,7 @@ const HomeScreen = () => {
     setIsRefreshing(false)
   }
 
+  /*
   const calcScheduleItems = () => {
     const today = new Date()
     const dateString = getDateString(today, 'usa')
@@ -79,6 +80,7 @@ const HomeScreen = () => {
 
     return actEls.map((a, k) => <HomeAgendaItem key={k} event={a} />)
   }
+  */
 
   const goTo = (
     stack: 'current' | 'app',
@@ -96,7 +98,7 @@ const HomeScreen = () => {
             params: params ?? undefined,
           }
         : undefined
-        
+
       // @ts-ignore
       appNavigation.navigate(route, options)
     }
@@ -124,12 +126,6 @@ const HomeScreen = () => {
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={refreshInfo} />
       }>
-      <ModalComponent
-        visible={modal.showing}
-        setModal={setModal}
-        afterClose={refreshInfo}
-        type={'newTalk'}
-      />
       <S.Container>
         <S.PageHead>
           <S.Welcome>
@@ -138,14 +134,16 @@ const HomeScreen = () => {
           </S.Welcome>
         </S.PageHead>
 
-        <S.TodayAgenda>
-          <S.AgendaTitle>Programação ({calcScheduleItems()})</S.AgendaTitle>
-          <S.AgendaList
-            nestedScrollEnabled={true}
-            contentContainerStyle={{ rowGap: 10 }}>
-            {renderSchedule()}
-          </S.AgendaList>
-        </S.TodayAgenda>
+        {/*
+          <S.TodayAgenda>
+            <S.AgendaTitle>Programação ({calcScheduleItems()})</S.AgendaTitle>
+            <S.AgendaList
+              nestedScrollEnabled={true}
+              contentContainerStyle={{ rowGap: 10 }}>
+              {renderSchedule()}
+            </S.AgendaList>
+          </S.TodayAgenda>
+        */}
       </S.Container>
       <S.Shortcuts>
         <S.Shortcut onPress={() => goTo('current', 'reportDay')}>
@@ -208,7 +206,7 @@ const HomeScreen = () => {
           </S.ReportList>
         </S.InfoResume>
 
-        <S.InfoResume>
+        <S.InfoResume complete={true}>
           <S.TopBlock>
             <S.InfoTitle>Revisitas</S.InfoTitle>
             <S.Seemore activeOpacity={1} onPress={() => goTo('app', 'Talks')}>
@@ -218,7 +216,7 @@ const HomeScreen = () => {
           </S.TopBlock>
           <S.RevisitsList
             nestedScrollEnabled={true}
-            contentContainerStyle={{ rowGap: 10 }}>
+            contentContainerStyle={{ rowGap: 4 }}>
             {(user?.revisits ?? []).map((r, k) => (
               <HomeRevisitItem key={k} info={r} openRevisit={openRevisit} />
             ))}

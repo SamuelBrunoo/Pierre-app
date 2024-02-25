@@ -1,47 +1,48 @@
 import React from 'react'
 import * as S from './styles'
-import { LocationIcon } from '../../utils/imports/icons'
+import { LocationIcon, LocationRedIcon } from '../../utils/imports/icons'
 import { Image } from 'react-native'
-import { AdressInfo } from '../../utils/@types/Api/mapAdress'
 import theme from '../../assets/styles/themes'
-
+import { FieldError } from '../../utils/@types/forms/newTalk'
 
 type Props = {
-  mapExibitionToggler: () => void;
-  snapUrl: string | null;
-  address: string | null;
+  mapExibitionToggler: () => void
+  snapUrl: string | null
+  address?: string | null
+  error: FieldError
 }
 
-const MapArea = ({ mapExibitionToggler, snapUrl, address }: Props) => {
-
-
+const MapArea = ({ mapExibitionToggler, snapUrl, address, error }: Props) => {
   return (
     <>
       <S.Container>
-        <S.AreaLabel>Endereço</S.AreaLabel>
+        <S.AreaLabel error={error.has}>Localização</S.AreaLabel>
         <S.MapWrapper
           style={theme.shadows.default}
-          activeOpacity={.8}
+          activeOpacity={0.8}
           onPress={mapExibitionToggler}
-        >
-          {snapUrl ?
+          error={error.has}>
+          {snapUrl ? (
             <Image
               source={{ uri: snapUrl }}
               style={{
                 width: '100%',
                 height: '100%',
-                marginVertical: -5
+                marginVertical: -5,
               }}
             />
-            :
-            <LocationIcon width={36} height={36} />}
+          ) : !error.has ? (
+            <LocationIcon width={36} height={36} />
+          ) : (
+            <LocationRedIcon width={36} height={36} />
+          )}
         </S.MapWrapper>
-        <S.AdressLabel>{address}</S.AdressLabel>
+        <S.AdressLabel error={error.has} style={{ opacity: error.has ? 1 : 0 }}>
+          {error.has ? error.message : address ?? ''}
+        </S.AdressLabel>
       </S.Container>
     </>
   )
-
 }
-
 
 export default MapArea

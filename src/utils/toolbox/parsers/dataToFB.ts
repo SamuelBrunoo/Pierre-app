@@ -1,9 +1,10 @@
-import { SaveTalkProps } from '../../@types/Api/saveTalk'
-import { TRevisitFStore } from '../../@types/_ministery/revisit'
+import { SaveNewPersonTalkProps, SaveRevisitTalkProps, SaveTalkProps } from '../../@types/Api/saveTalk'
+import { TFSVisit, TRevisitFStore } from '../../@types/_ministery/revisit'
 
-export const dataToFB = (
+
+export const newTalkParser = (
   userId: string,
-  talk: SaveTalkProps,
+  talk: SaveNewPersonTalkProps,
 ): TRevisitFStore => {
   let formatedData: TRevisitFStore = {
     address: talk.address,
@@ -27,3 +28,21 @@ export const dataToFB = (
 
   return formatedData
 }
+
+export const revisitParser = (
+  talk: SaveRevisitTalkProps,
+): TFSVisit => {
+  let formatedData: TFSVisit = {
+    date: talk.date.getTime(),
+    notes: talk.notes,
+    nextAbout: talk.nextAbout
+  }
+
+  return formatedData
+}
+
+
+export default ({
+  newTalkParser,
+  revisitParser
+})

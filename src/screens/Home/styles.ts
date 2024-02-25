@@ -1,5 +1,4 @@
-import styled from "styled-components/native"
-
+import styled from 'styled-components/native'
 
 export const Page = styled.ScrollView`
   flex: 1;
@@ -10,7 +9,7 @@ export const Container = styled.View`
   row-gap: 10px;
   padding-right: 20px;
   padding-left: 20px;
-  justify-content:  flex-start;
+  justify-content: flex-start;
   row-gap: 40px;
 `
 
@@ -23,13 +22,13 @@ export const Welcome = styled.View``
 
 export const Hi = styled.Text`
   font-weight: 300;
-  font-size:  20px;
+  font-size: 20px;
   color: ${({ theme }) => theme.colors.blackPiano};
 `
 
 export const UserName = styled.Text`
   font-weight: 700;
-  font-size:  20px;
+  font-size: 20px;
   color: ${({ theme }) => theme.colors.orange};
 `
 
@@ -83,9 +82,10 @@ export const ScName = styled.Text`
   text-align: center;
 `
 
-export const InfoResume = styled.View`
+export const InfoResume = styled.View<{ complete?: boolean }>`
   row-gap: 14px;
   margin: 0 4px;
+  ${({ complete }) => (complete ? 'flex: 1;' : '')}
 `
 
 export const TopBlock = styled.View`
@@ -103,7 +103,7 @@ export const Seemore = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   gap: 6px;
-  opacity: .6;
+  opacity: 0.6;
 `
 
 export const SeeMoreText = styled.Text`
@@ -112,8 +112,8 @@ export const SeeMoreText = styled.Text`
 `
 
 export const ReportList = styled.View`
-  padding-right:20px;
-  padding-left:20px;
+  padding-right: 20px;
+  padding-left: 20px;
   row-gap: 6px;
 `
 
@@ -129,14 +129,15 @@ export const TableLabel = styled.Text`
 `
 
 export const TableValue = styled.Text`
-  font-size:16px;
+  font-size: 16px;
   font-weight: 300;
   color: ${({ theme }) => theme.colors.orange};
 `
 
 export const RevisitsList = styled.ScrollView`
   row-gap: 10px;
-  max-height: 180px;
+  /* max-height: 180px; */
+  max-height: 264px;
   overflow-y: scroll;
   padding-right: 16px;
 `
