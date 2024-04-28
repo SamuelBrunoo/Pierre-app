@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as S from './styles'
 import NetInfo from '@react-native-community/netinfo'
 import Input from '../../../components/Input'
-import { FieldsErrors } from '../../../utils/@types/forms/newTalk'
+import {
+  FieldsErrors,
+  VerifiedField,
+} from '../../../utils/@types/forms/newTalk'
 import Select from '../../../components/Select'
 import {
   CalendarIcon,
@@ -23,7 +26,7 @@ import { useMMKV, useMMKVObject } from 'react-native-mmkv'
 import { LocalUserInfo } from '../../../utils/@types/_user/local'
 import { TTerritory } from '../../../utils/@types/_ministery/territory'
 import Checkbox from '../../../components/Checkbox'
-import ModalComponent from '../../../components/Modal'
+import ModalComponent, { TModalControl } from '../../../components/Modal'
 import { SaveTalkProps } from '../../../utils/@types/Api/saveTalk'
 import { useNavigation } from '@react-navigation/native'
 import { HomeProps } from '../../../navigators/Main'
@@ -95,7 +98,10 @@ const NewTalk = () => {
 
   const [user, setUserInfo] = useMMKVObject<LocalUserInfo>('user')
 
-  const [modal, setModal] = useState({ showing: false, type: 'saveLocation' })
+  const [modal, setModal] = useState<TModalControl>({
+    showing: false,
+    type: 'saveLocation',
+  })
 
   const mapViewRef = useRef<MapView | null>(null)
 
@@ -185,31 +191,25 @@ const NewTalk = () => {
   const verifyErrors = () => {
     let hasError: {
       has: boolean
-      fields: { field: string; hasError: boolean }[]
+      fields: VerifiedField[]
     } = {
       has: false,
       fields: [],
     }
 
     if (isNew) {
-      const fields = [
+      const fields: VerifiedField[] = [
         { field: 'name', hasError: isNew && person.name.trim().length === 0 },
-        // {
-        //   field: 'map',
-        //   hasError:
-        //     isNew &&
-        //     (!mapCoord || mapCoord.latitude === 0 || mapCoord.longitude === 0),
-        // },
+        {
+          field: 'map',
+          hasError: mapCoord.latitude === 0 || mapCoord.longitude === 0,
+        },
         { field: 'address', hasError: !address || address.trim().length === 0 },
         {
           field: 'territory',
           hasError: !neighborhood.id || neighborhood.id.trim().length === 0,
         },
         { field: 'notes', hasError: notes.trim().length === 0 },
-        // {
-        //   field: 'marker',
-        //   hasError: !marker || marker.latitude === 0 || marker.longitude === 0,
-        // },
         {
           field: 'nextAbout',
           hasError: !nextAbout || nextAbout.trim().length === 0,
@@ -223,7 +223,7 @@ const NewTalk = () => {
         }
       }
     } else {
-      const fields = [
+      const fields: VerifiedField[] = [
         { field: 'name', hasError: person.id?.trim().length === 0 },
         { field: 'notes', hasError: notes.trim().length === 0 },
         {
@@ -243,13 +243,15 @@ const NewTalk = () => {
     return hasError
   }
 
-  const showErrors = (fields: { field: string; hasError: boolean }[]) => {
+  const showErrors = (
+    fields: { field: keyof FieldsErrors; hasError: boolean }[],
+  ) => {
     let newObj = { ...errors }
     fields.forEach(f => {
-      // @ts-ignore
       newObj[f.field] = { ...newObj[f.field], has: f.hasError }
     })
     setErrors(newObj)
+    console.log(marker)
   }
 
   const handleSave = async () => {
@@ -323,10 +325,13 @@ const NewTalk = () => {
       <ModalComponent
         visible={modal.showing}
         setModal={setModal}
-        afterClose={() => {}}
-        saveLocationData={saveLocationData}
+        afterClose={() => {
+          setMapCoord({ latitude: 0, longitude: 0 })
+          setMarker({ latitude: 0, longitude: 0 })
+        }}
+        action={saveLocationData}
         type={modal.type as 'saveLocation'}
-        mapData={{
+        data={{
           mapCoord,
         }}
       />
@@ -383,6 +388,8 @@ const NewTalk = () => {
                 />
               )}
             </S.InputWrapper>
+
+            {/* where is */}
             {isNew && (
               <>
                 <MapArea

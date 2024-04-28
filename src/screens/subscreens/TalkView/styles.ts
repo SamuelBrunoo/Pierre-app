@@ -1,12 +1,9 @@
-import { Dimensions, ImageBackground } from 'react-native'
 import styled from 'styled-components/native'
 
 export const Page = styled.ScrollView`
-  position: absolute;
+  flex: 1;
   padding-top: 24px;
-  z-index: 2;
   width: 100%;
-  height: 100%;
 `
 
 export const LocationSection = styled.View`
@@ -22,7 +19,7 @@ export const Address = styled.Text`
 `
 
 export const Map = styled.View`
-  background-color: #434343;
+  background-color: ${({ theme }) => theme.background.cards};
   width: 100%;
   border-radius: 6px;
   aspect-ratio: 2.2;
@@ -44,7 +41,10 @@ export const NextSubject = styled.Text`
 
 export const History = styled.View`
   gap: 10px;
+  flex-grow: 1;
+  flex: 1;
 `
 
 export const ListContainer = styled.ScrollView`
+  padding-bottom: 10px;
 `

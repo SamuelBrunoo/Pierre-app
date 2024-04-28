@@ -41,6 +41,7 @@ import theme from '../../assets/styles/themes'
 import ReportDay from '../../screens/subscreens/ReportDay'
 import NoteTalk from '../../screens/subscreens/NoteTalk'
 import TalkView from '../../screens/subscreens/TalkView'
+import LeftBack from '../../components/Header/LeftBack'
 
 // Routes
 export type DrawerRoutes = 'Home' | 'Talks'
@@ -170,7 +171,7 @@ const MainNavigator = () => {
           name="mainTalks"
           component={TalksScreen}
           options={{
-            headerTitle: 'Pessoas contatadas',
+            headerTitle: 'Conversas',
             ...(mainScreensHeaderProps as Partial<NativeStackHeaderProps>),
           }}
         />
@@ -179,6 +180,7 @@ const MainNavigator = () => {
           component={TalkView as FunctionComponent}
           options={{
             headerTitle: '',
+            headerLeft: () => <LeftBack />,
             ...(mainScreensHeaderProps as Partial<NativeStackHeaderProps>),
           }}
         />

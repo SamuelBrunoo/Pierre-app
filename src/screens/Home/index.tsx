@@ -20,17 +20,19 @@ import {
   DrawerRoutes,
   HomeProps,
   HomeRoutes,
+  TalksProps,
+  TalksRoutes,
 } from '../../navigators/Main'
 import useStore from '../../store'
 
 const HomeScreen = () => {
   const appNavigation = useNavigation<DrawerProps>()
   const navigation = useNavigation<HomeProps>()
+  const talksNavigation = useNavigation<TalksProps>()
 
   const { user, User } = useStore(state => state)
   const [_, setUserInfo] = useMMKVObject<LocalUserInfo>('user')
 
-  const [modal, setModal] = useState({ showing: false, type: '' })
   const [isRefreshing, setIsRefreshing] = useState(false)
 
   const refreshInfo = async () => {
@@ -83,8 +85,8 @@ const HomeScreen = () => {
   */
 
   const goTo = (
-    stack: 'current' | 'app',
-    route: HomeRoutes | DrawerRoutes,
+    stack: 'current' | 'app' | 'talks',
+    route: HomeRoutes | DrawerRoutes | TalksRoutes,
     subScreen?: string,
     params?: any,
   ) => {
@@ -101,14 +103,32 @@ const HomeScreen = () => {
 
       // @ts-ignore
       appNavigation.navigate(route, options)
+    } else if (stack === 'talks') {
+      const options = subScreen
+        ? {
+            screen: subScreen,
+            params: params ?? undefined,
+          }
+        : undefined
+
+      // @ts-ignore
+      talksNavigation.navigate(route, options)
     }
   }
 
   const openRevisit = (revisit: TRevisitFStore) => {
-    // navigation.navigate('Talks', {
-    //   single: true,
-    //   data: revisit,
-    // })
+    goTo('app', 'Talks', 'talkView', { rev: revisit })
+  }
+
+  const getGreetings = () => {
+    let greetings = ''
+    const h = new Date().getHours()
+
+    if (h > 2 && h < 12) greetings = 'Bom dia,'
+    else if (h >= 12 && h < 18) greetings = 'Boa tarde,'
+    else if (h >= 18 || h <= 2) greetings = 'Boa noite,'
+
+    return greetings
   }
 
   useEffect(() => {
@@ -129,7 +149,7 @@ const HomeScreen = () => {
       <S.Container>
         <S.PageHead>
           <S.Welcome>
-            <S.Hi>Boa tarde,</S.Hi>
+            <S.Hi>{getGreetings()}</S.Hi>
             <S.UserName>{user?.name}</S.UserName>
           </S.Welcome>
         </S.PageHead>
@@ -146,12 +166,12 @@ const HomeScreen = () => {
         */}
       </S.Container>
       <S.Shortcuts>
-        <S.Shortcut onPress={() => goTo('current', 'reportDay')}>
+        {/* <S.Shortcut onPress={() => goTo('current', 'reportDay')}>
           <S.ScIconArea>
             <icons.ClockIcon />
           </S.ScIconArea>
           <S.ScName numberOfLines={1}>Registrar dia</S.ScName>
-        </S.Shortcut>
+        </S.Shortcut> */}
         <S.Shortcut onPress={() => goTo('current', 'noteTalk')}>
           <S.ScIconArea>
             <icons.PlusIcon />

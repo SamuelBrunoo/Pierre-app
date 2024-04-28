@@ -11,3 +11,8 @@ export type FieldError = {
   has: boolean
   message: string
 }
+
+export type VerifiedField = {
+  field: keyof FieldsErrors
+  hasError: boolean
+}

@@ -18,6 +18,7 @@ export const Notes = styled.Text`
   font-size: 14px;
   font-weight: 300;
   color: ${({ theme }) => theme.colors.blackPiano};
+  white-space: pre-line;
 `
 
 export const Hour = styled.Text`

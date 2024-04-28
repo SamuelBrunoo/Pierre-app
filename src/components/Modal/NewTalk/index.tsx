@@ -112,8 +112,11 @@ const NewTalk = ({ handleClose }: Props) => {
 
   const [errors, setErrors] = useState<FieldsErrors>({
     name: { has: false, message: 'Digite ou escolha o nome da pessoa' },
+    address: { has: false, message: 'Digite um endereço' },
+    territory: { has: false, message: 'Especifique o território' },
+    map: { has: false, message: 'Defina a localização' },
     notes: { has: false, message: 'Por favor, faça uma anotação' },
-    territory: { has: false, message: 'Digite o território' },
+    nextAbout: { has: false, message: 'Anote o assunto da próxima visita' },
   })
   const [isNew, setIsNew] = useState(false)
   const [pickerConfig, setPickerConfig] = useState<{
@@ -348,7 +351,9 @@ const NewTalk = ({ handleClose }: Props) => {
                         mapExibitionToggler={handleMapClick}
                         snapUrl={snap}
                         address={address}
+                        error={errors.map}
                       />
+
                       {/* if has territories */}
                       <Select
                         options={user?.territories as TTerritory[]}
@@ -426,8 +431,18 @@ const NewTalk = ({ handleClose }: Props) => {
                 </S.DateTimeInfo>
               </S.Content>
               <S.BtnsArea>
-                <Button type="cancel" fn={handleClose} text="Cancelar" />
-                <Button type="confirm" fn={handleSave} text="Salvar" />
+                <Button
+                  mode="cancel"
+                  type="default"
+                  action={handleClose}
+                  title="Cancelar"
+                />
+                <Button
+                  mode="confirm"
+                  type="default"
+                  action={handleSave}
+                  title="Salvar"
+                />
               </S.BtnsArea>
             </>
           )}

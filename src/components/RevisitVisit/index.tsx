@@ -1,13 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as S from './styles'
 import { TFSVisit } from '../../utils/@types/_ministery/revisit'
 import { Animated } from 'react-native'
 
 type Props = {
   info: TFSVisit
+  handleDeleteBtn: (log: TFSVisit) => void
+  handleEditBtn: (log: TFSVisit) => void
 }
 
-const RevisitVisit = ({ info }: Props) => {
+const RevisitVisit = ({ info, handleDeleteBtn, handleEditBtn }: Props) => {
   const date = new Date(info.date)
 
   const animHeight = useRef(new Animated.Value(0)).current
@@ -58,18 +60,18 @@ const RevisitVisit = ({ info }: Props) => {
       <Animated.View style={{ ...S.expanded, height: animHeight }}>
         <S.Notes
           onTextLayout={ev => {
-            console.log(ev.nativeEvent.lines.length)
-            setContentSize((ev.nativeEvent.lines.length * 14) + 36)
-          }}
-        >{info.notes}</S.Notes>
+            setContentSize(ev.nativeEvent.lines.length * 14 + 36)
+          }}>
+          {info.notes}
+        </S.Notes>
         <S.Bottom>
           <S.Btns>
-            <S.BottomBtn>
+            <S.BottomBtn onPress={() => handleDeleteBtn(info)}>
               <S.BtnText from={'delete'}>Excluir</S.BtnText>
             </S.BottomBtn>
-            {/* <S.BottomBtn>
+            <S.BottomBtn onPress={() => handleEditBtn(info)}>
               <S.BtnText from={'edit'}>Editar</S.BtnText>
-            </S.BottomBtn> */}
+            </S.BottomBtn>
           </S.Btns>
           <S.Hour>{renderHour()}</S.Hour>
         </S.Bottom>
